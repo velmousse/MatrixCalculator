@@ -18,6 +18,7 @@ import java.util.HashMap;
 public class Controller {
     private HashMap<String, Matrice> map = new HashMap<>();
     private ArrayList<TextField> textFields = new ArrayList<>();
+    private int tfWidth = 60, tfHeight = 30;
 
     @FXML
     private Spinner spinnerLignes, spinnerColonnes;
@@ -29,36 +30,37 @@ public class Controller {
         gridPane.setAlignment(Pos.CENTER);
 
         gridPane.setGridLinesVisible(false);
-        gridPane.setMaxSize((int) spinnerColonnes.getValue()*60, (int) spinnerLignes.getValue()*30 );
+        setGridPane();
 
-    /*    ColumnConstraints colConstraint = new ColumnConstraints(50);
-        colConstraint.setHalignment(HPos.RIGHT);
+        spinnerLignes.valueProperty().addListener((that, oldValue, newValue) -> setGridPane());
+        spinnerColonnes.valueProperty().addListener((that, oldValue, newValue) -> setGridPane());
+    }
 
-        RowConstraints rowConstraints = new RowConstraints(50);
-        rowConstraints.setValignment(VPos.CENTER);*/
+    private void setGridPane() {
+        gridPane.getChildren().clear();
 
-        for (int y = 0; y < (int) spinnerLignes.getValue(); y++) { //Lignes
-            for (int x = 0; x < (int) spinnerColonnes.getValue(); x++) { //Colonnes
+        gridPane.setMaxSize((int) spinnerColonnes.getValue()*tfWidth, (int) spinnerLignes.getValue()*tfHeight );
+
+        for (int y = 0; y < (int) spinnerLignes.getValue(); y++) {
+            for (int x = 0; x < (int) spinnerColonnes.getValue(); x++) {
                 TextField temp = new TextField();
+                temp.setPromptText("0");
 
                 temp.setAlignment(Pos.CENTER);
                 temp.setMaxWidth(Region.USE_PREF_SIZE);
                 temp.setMaxHeight(Region.USE_PREF_SIZE);
                 temp.setMinWidth(Region.USE_PREF_SIZE);
                 temp.setMinHeight(Region.USE_PREF_SIZE);
-                temp.setPrefWidth(60);
-                temp.setPrefHeight(30);
+                temp.setPrefWidth(tfWidth);
+                temp.setPrefHeight(tfHeight);
 
 
                 textFields.add(temp);
                 gridPane.add(temp, x, y);
-            //    gridPane.getColumnConstraints().add(colConstraint);
             }
-          //  gridPane.getRowConstraints().add(rowConstraints);
         }
     }
 
-
-    private void ajouterMatrice() {
+    public void ajouterMatrice() {
     }
 }
