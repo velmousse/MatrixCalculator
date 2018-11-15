@@ -6,6 +6,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
@@ -62,5 +63,15 @@ public class Controller {
     }
 
     public void ajouterMatrice() {
+
+        TextInputDialog alerte = new TextInputDialog("Entrez ici");
+        alerte.setTitle("Information importante");
+        alerte.setHeaderText("Veuillez entrer le nom de la matrice");
+        alerte.setContentText("nom: ");
+        String resultat = alerte.showAndWait().get();
+
+        Matrice tempo= new Matrice(resultat,(int)spinnerColonnes.getValue(),(int)spinnerLignes.getValue());
+
+
     }
 }
