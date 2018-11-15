@@ -1,16 +1,12 @@
 package sample.controllers;
 
 import javafx.fxml.FXML;
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.RowConstraints;
 import sample.data.Matrice;
 
 import java.util.ArrayList;
@@ -64,21 +60,23 @@ public class Controller {
     }
 
     public void ajouterMatrice() {
-
         TextInputDialog alerte = new TextInputDialog("Entrez ici");
-        alerte.setTitle("Information importante");
+
+        alerte.setTitle("Nom de matrice");
         alerte.setHeaderText("Veuillez entrer le nom de la matrice");
-        alerte.setContentText("nom: ");
+        alerte.setContentText("Nom: ");
         String resultat = alerte.showAndWait().get();
 
-        Matrice tempo= new Matrice(resultat,(int)spinnerColonnes.getValue(),(int)spinnerLignes.getValue());
+        Matrice tempo = new Matrice(resultat, (int) spinnerColonnes.getValue(), (int) spinnerLignes.getValue());
 
-        int value=0;
-        for(int i=0;i<(int)spinnerLignes.getValue();i++){
+        int value = 0;
+        for(int i = 0; i < (int) spinnerLignes.getValue() ;i++){
+            for(int j = 0; j < (int) spinnerColonnes.getValue(); j++) {
+                if (!textFields.get(value).getText().isEmpty())
+                    tempo.setValue(Float.parseFloat(textFields.get(value).getText()), j, i);
+                else
+                    tempo.setValue(0, j, i);
 
-            for(int j=0; j<(int)spinnerColonnes.getValue();j++)
-            {
-                tempo.setValue(Float.parseFloat(textFields.get(value).getText()),j,i);
                 value++;
             }
         }
