@@ -1,12 +1,15 @@
 package sample.controllers;
 
 import javafx.fxml.FXML;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.RowConstraints;
 import sample.data.Matrice;
 
 import java.util.ArrayList;
@@ -24,13 +27,19 @@ public class Controller {
 
     public void initialize() {
         gridPane.setAlignment(Pos.CENTER);
-        ColumnConstraints column = new ColumnConstraints();
-        column.setPercentWidth(30);
-        gridPane.getColumnConstraints().add(column);
 
-        for (int y = 0; y < 4; y++) { //Lignes
-            TextField temp = new TextField();
-            for (int x = 0; x < 4; x++) { //Colonnes
+        gridPane.setGridLinesVisible(false);
+        gridPane.setMaxSize((int) spinnerColonnes.getValue()*60, (int) spinnerLignes.getValue()*30 );
+
+    /*    ColumnConstraints colConstraint = new ColumnConstraints(50);
+        colConstraint.setHalignment(HPos.RIGHT);
+
+        RowConstraints rowConstraints = new RowConstraints(50);
+        rowConstraints.setValignment(VPos.CENTER);*/
+
+        for (int y = 0; y < (int) spinnerLignes.getValue(); y++) { //Lignes
+            for (int x = 0; x < (int) spinnerColonnes.getValue(); x++) { //Colonnes
+                TextField temp = new TextField();
 
                 temp.setAlignment(Pos.CENTER);
                 temp.setMaxWidth(Region.USE_PREF_SIZE);
@@ -40,11 +49,12 @@ public class Controller {
                 temp.setPrefWidth(60);
                 temp.setPrefHeight(30);
 
+
                 textFields.add(temp);
-                gridPane.addRow(x, temp);
                 gridPane.add(temp, x, y);
+            //    gridPane.getColumnConstraints().add(colConstraint);
             }
-            gridPane.addRow(y, temp);
+          //  gridPane.getRowConstraints().add(rowConstraints);
         }
     }
 
