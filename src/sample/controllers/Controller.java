@@ -39,6 +39,7 @@ public class Controller {
 
     private void setGridPane() {
         gridPane.getChildren().clear();
+        textFields.clear();
 
         gridPane.setMaxSize((int) spinnerColonnes.getValue()*tfWidth, (int) spinnerLignes.getValue()*tfHeight );
 
@@ -72,6 +73,15 @@ public class Controller {
 
         Matrice tempo= new Matrice(resultat,(int)spinnerColonnes.getValue(),(int)spinnerLignes.getValue());
 
+        int value=0;
+        for(int i=0;i<(int)spinnerLignes.getValue();i++){
 
+            for(int j=0; j<(int)spinnerColonnes.getValue();j++)
+            {
+                tempo.setValue(Float.parseFloat(textFields.get(value).getText()),j,i);
+                value++;
+            }
+        }
+        map.put(resultat,tempo);
     }
 }

@@ -16,4 +16,8 @@ public class Matrice {
     public String getNom() {
         return this.nom;
     }
+
+    public void setValue(float value, int column, int row)  {
+        tableau[row][column] = value;
+    }
 }
