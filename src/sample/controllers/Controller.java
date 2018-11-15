@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import sample.data.Matrice;
@@ -22,9 +23,14 @@ public class Controller {
     private GridPane gridPane;
 
     public void initialize() {
-        for (int y = 0; y < 10; y++) { //Lignes
-            for (int x = 0; x < 10; x++) { //Colonnes
-                TextField temp = new TextField();
+        gridPane.setAlignment(Pos.CENTER);
+        ColumnConstraints column = new ColumnConstraints();
+        column.setPercentWidth(30);
+        gridPane.getColumnConstraints().add(column);
+
+        for (int y = 0; y < 4; y++) { //Lignes
+            TextField temp = new TextField();
+            for (int x = 0; x < 4; x++) { //Colonnes
 
                 temp.setAlignment(Pos.CENTER);
                 temp.setMaxWidth(Region.USE_PREF_SIZE);
@@ -33,9 +39,12 @@ public class Controller {
                 temp.setMinHeight(Region.USE_PREF_SIZE);
                 temp.setPrefWidth(60);
                 temp.setPrefHeight(30);
+
                 textFields.add(temp);
+                gridPane.addRow(x, temp);
                 gridPane.add(temp, x, y);
             }
+            gridPane.addRow(y, temp);
         }
     }
 
