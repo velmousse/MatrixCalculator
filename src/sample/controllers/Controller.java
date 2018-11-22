@@ -1,21 +1,31 @@
 package sample.controllers;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import sample.data.Matrice;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class Controller {
     private HashMap<String, Matrice> map = new HashMap<>();
     private ArrayList<TextField> textFields = new ArrayList<>();
     private int tfWidth = 60, tfHeight = 30;
+    private ArrayList<String> listeNoms = new ArrayList<>();
+    private ObservableList<String> observableList;
+    private ChoiceBox<String> choixGauche, choixDroite;
 
     @FXML
     private Spinner spinnerLignes, spinnerColonnes;
@@ -23,14 +33,24 @@ public class Controller {
     @FXML
     private GridPane gridPane;
 
+    @FXML
+    private HBox hBox;
+
     public void initialize() {
+        listeNoms.add("");
+        hBox.setSpacing(10);
+        hBox.setAlignment(Pos.CENTER);
+
+        setChoiceBox();
+
         gridPane.setAlignment(Pos.CENTER);
 
-        gridPane.setGridLinesVisible(false);
+        gridPane.setGridLinesVisible(true);
         setGridPane();
 
         spinnerLignes.valueProperty().addListener((that, oldValue, newValue) -> setGridPane());
         spinnerColonnes.valueProperty().addListener((that, oldValue, newValue) -> setGridPane());
+
     }
 
     private void setGridPane() {
@@ -60,12 +80,24 @@ public class Controller {
     }
 
     public void ajouterMatrice() {
-        TextInputDialog alerte = new TextInputDialog("Entrez ici");
+        String resultat = "";
+        boolean notNew = true;
 
-        alerte.setTitle("Nom de matrice");
-        alerte.setHeaderText("Veuillez entrer le nom de la matrice");
-        alerte.setContentText("Nom: ");
-        String resultat = alerte.showAndWait().get();
+        while (notNew) {
+            notNew = false;
+
+            TextInputDialog alerte = new TextInputDialog("Entrez ici");
+
+            alerte.setTitle("Nom de matrice");
+            alerte.setHeaderText("Veuillez entrer le nom de la matrice");
+            alerte.setContentText("Nom: ");
+            resultat = alerte.showAndWait().get();
+
+            for (String nom : listeNoms)
+                if (nom.equals(resultat) || resultat.isEmpty()) notNew = true;
+        }
+
+        listeNoms.add(resultat);
 
         Matrice tempo = new Matrice(resultat, (int) spinnerColonnes.getValue(), (int) spinnerLignes.getValue());
 
@@ -80,6 +112,7 @@ public class Controller {
                 value++;
             }
         }
+        setChoiceBox();
         map.put(resultat,tempo);
         System.out.print(tempo.toString());
 
@@ -129,5 +162,34 @@ public class Controller {
             return "Les formats des matrices ne sont pas identiques.";
         }
 
+    }
+
+    public void getMatrice() {
+
+    }
+
+    public void setChoiceBox() {
+        hBox.getChildren().clear();
+
+        observableList = FXCollections.observableList((List) listeNoms);
+        choixGauche = new ChoiceBox<>(observableList);
+        choixGauche.setValue(listeNoms.get(0));
+        choixGauche.setMaxWidth(Region.USE_PREF_SIZE);
+        choixGauche.setMaxHeight(Region.USE_PREF_SIZE);
+        choixGauche.setMinWidth(Region.USE_PREF_SIZE);
+        choixGauche.setMinHeight(Region.USE_PREF_SIZE);
+        choixGauche.setPrefWidth(70);
+        choixGauche.setPrefHeight(25);
+
+        choixDroite = new ChoiceBox<>(observableList);
+        choixDroite.setValue(listeNoms.get(0));
+        choixDroite.setMaxWidth(Region.USE_PREF_SIZE);
+        choixDroite.setMaxHeight(Region.USE_PREF_SIZE);
+        choixDroite.setMinWidth(Region.USE_PREF_SIZE);
+        choixDroite.setMinHeight(Region.USE_PREF_SIZE);
+        choixDroite.setPrefWidth(70);
+        choixDroite.setPrefHeight(25);
+
+        hBox.getChildren().addAll(choixGauche, choixDroite);
     }
 }
