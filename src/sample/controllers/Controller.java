@@ -81,5 +81,53 @@ public class Controller {
             }
         }
         map.put(resultat,tempo);
+        System.out.print(tempo.toString());
+
+    }
+    public String addition( Matrice as, Matrice bs ){
+
+        if(as.getRows()==bs.getRows()&&as.getColumns()==as.getColumns())
+        { int tempoa;
+            int tempob;
+            int addition;
+            Matrice resultat=new Matrice("",as.getColumns(), as.getRows());
+            for(int i=0; i<as.getRows();i++){
+                for(int j=0; j<as.getColumns();j++){
+                    tempoa=(int)as.getValue(j,i);
+                    tempob=(int)bs.getValue(j,i);
+                    addition= tempoa+tempob;
+                    resultat.setValue(addition,j,i);
+                }
+            }
+            String finalle= resultat.toString();
+            return finalle;
+        }
+        else{
+            return "Les formats des matrices ne sont pas identiques.";
+        }
+
+    }
+    public String soustration( Matrice as, Matrice bs ){
+
+        if(as.getRows()==bs.getRows()&&as.getColumns()==as.getColumns())
+        { int tempoa;
+            int tempob;
+            int soustraction;
+            Matrice resultat=new Matrice("",as.getColumns(), as.getRows());
+            for(int i=0; i<as.getRows();i++){
+                for(int j=0; j<as.getColumns();j++){
+                    tempoa=(int)as.getValue(j,i);
+                    tempob=(int)bs.getValue(j,i);
+                    soustraction= tempoa-tempob;
+                    resultat.setValue(soustraction,j,i);
+                }
+            }
+            String finalle= resultat.toString();
+            return finalle;
+        }
+        else{
+            return "Les formats des matrices ne sont pas identiques.";
+        }
+
     }
 }
