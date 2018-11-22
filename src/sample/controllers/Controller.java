@@ -114,7 +114,6 @@ public class Controller {
         }
         setChoiceBox();
         map.put(resultat,tempo);
-        System.out.print(tempo.toString());
 
     }
     public String addition( Matrice as, Matrice bs ){
