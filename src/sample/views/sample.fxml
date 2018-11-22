@@ -8,9 +8,11 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <TabPane prefHeight="650.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controllers.Controller">
    <tabs>
@@ -39,8 +41,28 @@
          <content>
             <VBox prefHeight="200.0" prefWidth="100.0">
                <children>
-                  <Pane prefHeight="450.0" prefWidth="800.0" />
-                  <TextArea blendMode="DARKEN" editable="false" prefHeight="473.0" prefWidth="800.0" />
+                  <Pane prefHeight="422.0" prefWidth="650.0">
+                     <children>
+                        <HBox fx:id="hBox" layoutX="14.0" layoutY="50.0" prefHeight="32.0" prefWidth="164.0" />
+                        <Label layoutX="72.0" layoutY="33.0" text="Matrices:" />
+                        <Label layoutX="396.0" layoutY="33.0" text="Opérations:" />
+                        <Button layoutX="254.0" layoutY="51.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Addition" />
+                        <Button layoutX="254.0" layoutY="104.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Soustraction" />
+                        <Button layoutX="254.0" layoutY="158.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Multiplication par un scalaire" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Button>
+                        <Button layoutX="380.0" layoutY="104.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Puissance" />
+                        <Button layoutX="445.0" layoutY="219.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Transposition" />
+                        <Button layoutX="380.0" layoutY="51.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Inversion" />
+                        <Button layoutX="512.0" layoutY="51.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Produit matriciel" textAlignment="CENTER" wrapText="true" />
+                        <Button layoutX="512.0" layoutY="104.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Produit vectoriel" textAlignment="CENTER" wrapText="true" />
+                        <Button layoutX="512.0" layoutY="158.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Produit d'Hadamard" textAlignment="CENTER" wrapText="true" />
+                        <Button layoutX="380.0" layoutY="158.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Produit tensoriel" textAlignment="CENTER" wrapText="true" />
+                        <Button layoutX="316.0" layoutY="219.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Déterminant" />
+                     </children></Pane>
+                  <TextArea blendMode="DARKEN" editable="false" prefHeight="473.0" prefWidth="800.0" promptText="Les résultats s'afficheront ici" />
                </children>
             </VBox>
          </content>
