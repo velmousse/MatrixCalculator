@@ -46,23 +46,23 @@
                         <HBox fx:id="hBox" layoutX="14.0" layoutY="50.0" prefHeight="32.0" prefWidth="164.0" />
                         <Label layoutX="72.0" layoutY="33.0" text="Matrices:" />
                         <Label layoutX="396.0" layoutY="33.0" text="Opérations:" />
-                        <Button layoutX="254.0" layoutY="51.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Addition" />
-                        <Button layoutX="254.0" layoutY="104.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Soustraction" />
-                        <Button layoutX="254.0" layoutY="158.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Multiplication par un scalaire" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+                        <Button layoutX="254.0" layoutY="51.0" mnemonicParsing="false" onAction="#addition" prefHeight="50.0" prefWidth="90.0" text="Addition" />
+                        <Button layoutX="254.0" layoutY="104.0" mnemonicParsing="false" onAction="#soustraction" prefHeight="50.0" prefWidth="90.0" text="Soustraction" />
+                        <Button layoutX="254.0" layoutY="158.0" mnemonicParsing="false" onAction="#multScalaire" prefHeight="50.0" prefWidth="90.0" text="Multiplication par un scalaire" textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
                            <font>
                               <Font size="10.0" />
                            </font>
                         </Button>
-                        <Button layoutX="380.0" layoutY="104.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Puissance" />
-                        <Button layoutX="445.0" layoutY="219.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Transposition" />
-                        <Button layoutX="380.0" layoutY="51.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Inversion" />
-                        <Button layoutX="512.0" layoutY="51.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Produit matriciel" textAlignment="CENTER" wrapText="true" />
-                        <Button layoutX="512.0" layoutY="104.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Produit vectoriel" textAlignment="CENTER" wrapText="true" />
-                        <Button layoutX="512.0" layoutY="158.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Produit d'Hadamard" textAlignment="CENTER" wrapText="true" />
-                        <Button layoutX="380.0" layoutY="158.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Produit tensoriel" textAlignment="CENTER" wrapText="true" />
-                        <Button layoutX="316.0" layoutY="219.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="90.0" text="Déterminant" />
+                        <Button layoutX="380.0" layoutY="104.0" mnemonicParsing="false" onAction="#puissance" prefHeight="50.0" prefWidth="90.0" text="Puissance" />
+                        <Button layoutX="445.0" layoutY="219.0" mnemonicParsing="false" onAction="#transposee" prefHeight="50.0" prefWidth="90.0" text="Transposition" />
+                        <Button layoutX="380.0" layoutY="51.0" mnemonicParsing="false" onAction="#inversion" prefHeight="50.0" prefWidth="90.0" text="Inversion" />
+                        <Button layoutX="512.0" layoutY="51.0" mnemonicParsing="false" onAction="#produitMat" prefHeight="50.0" prefWidth="90.0" text="Produit matriciel" textAlignment="CENTER" wrapText="true" />
+                        <Button layoutX="512.0" layoutY="104.0" mnemonicParsing="false" onAction="#produitVect" prefHeight="50.0" prefWidth="90.0" text="Produit vectoriel" textAlignment="CENTER" wrapText="true" />
+                        <Button layoutX="512.0" layoutY="158.0" mnemonicParsing="false" onAction="#produitHad" prefHeight="50.0" prefWidth="90.0" text="Produit d'Hadamard" textAlignment="CENTER" wrapText="true" />
+                        <Button layoutX="380.0" layoutY="158.0" mnemonicParsing="false" onAction="#produitTens" prefHeight="50.0" prefWidth="90.0" text="Produit tensoriel" textAlignment="CENTER" wrapText="true" />
+                        <Button layoutX="316.0" layoutY="219.0" mnemonicParsing="false" onAction="#determinant" prefHeight="50.0" prefWidth="90.0" text="Déterminant" />
                      </children></Pane>
-                  <TextArea blendMode="DARKEN" editable="false" prefHeight="473.0" prefWidth="800.0" promptText="Les résultats s'afficheront ici" />
+                  <TextArea fx:id="textArea" blendMode="DARKEN" editable="false" prefHeight="473.0" prefWidth="800.0" promptText="Les résultats s'afficheront ici" />
                </children>
             </VBox>
          </content>
