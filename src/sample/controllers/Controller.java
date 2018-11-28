@@ -162,6 +162,30 @@ public class Controller {
         }
 
     }
+    public String multiplierScalaire(int nombre, Matrice initiale) {
+        Matrice resultat= new Matrice("",initiale.getColumns(),initiale.getRows());
+        for(int i=0; i<initiale.getRows();i++){
+            for(int j=0;j<initiale.getColumns();j++){
+                int temporaire= (int)initiale.getValue(j,i)*nombre;
+                resultat.setValue(temporaire,j,i);
+            }
+        }
+        String finalle=resultat.toString();
+        return finalle;
+    }
+    public String produitMatriciel(Matrice a,Matrice b){
+
+        if(a.getColumns()==b.getRows()){
+            Matrice resultat = new Matrice("",b.getColumns(),a.getRows());
+            for(int i=0;i<a.getRows();i++){
+                for(int j=0;j<a.getColumns();j++){
+                }
+            }
+        }
+
+
+        return new String();
+    }
 
     public void getMatrice() {
 
