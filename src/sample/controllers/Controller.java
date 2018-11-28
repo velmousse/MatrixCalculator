@@ -146,6 +146,22 @@ public class Controller {
         hBox.getChildren().addAll(choixGauche, choixDroite);
     }
 
+    public Matrice[] getMatrices() {
+        if (choixGauche.getValue().isEmpty() && choixDroite.getValue().isEmpty()) {
+            Alert alerte = new Alert(Alert.AlertType.INFORMATION);
+            alerte.setTitle("Erreur");
+            alerte.setHeaderText("Aucune matrice entrée");
+            alerte.setContentText("Veuillez entrer des matrices valides");
+            alerte.showAndWait();
+            return null;
+        } else if (choixGauche.getValue().isEmpty())
+            return new Matrice[]{map.get(choixDroite.getValue())};
+        else if (choixDroite.getValue().isEmpty())
+            return new Matrice[]{map.get(choixGauche.getValue())};
+        else
+            return new Matrice[]{map.get(choixGauche.getValue()), map.get(choixDroite.getValue())};
+    }
+
     public void addition() {
         Matrice mats[] = getMatrices();
 
@@ -173,7 +189,7 @@ public class Controller {
         }
     }
 
-    public void soustration() {
+    public void soustraction() {
         Matrice mats[] = getMatrices();
 
         if (mats.length == 2) {
@@ -198,24 +214,41 @@ public class Controller {
         } else {
             textArea.setText("Veuillez entrer deux matrices");
         }
+    }
+
+    public void multScalaire() {
 
     }
 
-    public Matrice[] getMatrices() {
-        if (choixGauche.getValue().isEmpty() && choixDroite.getValue().isEmpty()) {
-            Alert alerte = new Alert(Alert.AlertType.INFORMATION);
-            alerte.setTitle("Erreur");
-            alerte.setHeaderText("Aucune matrice entrée");
-            alerte.setContentText("Veuillez entrer des matrices valides");
-            alerte.showAndWait();
-            return null;
-        } else if (choixGauche.getValue().isEmpty())
-            return new Matrice[]{map.get(choixDroite.getValue())};
-        else if (choixDroite.getValue().isEmpty())
-            return new Matrice[]{map.get(choixGauche.getValue())};
-        else
-            return new Matrice[]{map.get(choixGauche.getValue()), map.get(choixDroite.getValue())};
+    public void puissance() {
+
     }
 
+    public void transposee() {
 
+    }
+
+    public void inversion() {
+
+    }
+
+    public void produitMat() {
+
+    }
+
+    public void produitVect() {
+
+    }
+
+    public void produitHad() {
+
+    }
+
+    public void produitTens() {
+
+    }
+
+    public void determinant() {
+
+    }
 }
