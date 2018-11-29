@@ -109,7 +109,7 @@ public class Controller {
         for (int i = 0; i < (int) spinnerLignes.getValue(); i++) {
             for (int j = 0; j < (int) spinnerColonnes.getValue(); j++) {
                 if (!textFields.get(value).getText().isEmpty())
-                    tempo.setValue(Float.parseFloat(textFields.get(value).getText()), j, i);
+                    tempo.setValue(Double.parseDouble(textFields.get(value).getText()), j, i);
                 else
                     tempo.setValue(0, j, i);
 
@@ -121,7 +121,7 @@ public class Controller {
 
     }
 
-    public void setChoiceBox() {
+    private void setChoiceBox() {
         hBox.getChildren().clear();
 
         observableList = FXCollections.observableList((List) listeNoms);
@@ -166,15 +166,15 @@ public class Controller {
         Matrice mats[] = getMatrices();
 
         if (mats.length == 2) {
-            if (mats[0].getRows() == mats[1].getRows() && mats[0].getColumns() == mats[0].getColumns()) {
-                int tempoA;
-                int tempoB;
-                int addition;
+            if (mats[0].getRows() == mats[1].getRows() && mats[0].getColumns() == mats[1].getColumns()) {
+                double tempoA;
+                double tempoB;
+                double addition;
                 Matrice resultat = new Matrice("", mats[0].getColumns(), mats[0].getRows());
                 for (int i = 0; i < mats[0].getRows(); i++) {
                     for (int j = 0; j < mats[0].getColumns(); j++) {
-                        tempoA = (int) mats[0].getValue(j, i);
-                        tempoB = (int) mats[1].getValue(j, i);
+                        tempoA = mats[0].getValue(j, i);
+                        tempoB = mats[1].getValue(j, i);
                         addition = tempoA + tempoB;
                         resultat.setValue(addition, j, i);
                     }
@@ -193,15 +193,15 @@ public class Controller {
         Matrice mats[] = getMatrices();
 
         if (mats.length == 2) {
-            if (mats[0].getRows() == mats[1].getRows() && mats[0].getColumns() == mats[0].getColumns()) {
-                int tempoA;
-                int tempoB;
-                int soustraction;
+            if (mats[0].getRows() == mats[1].getRows() && mats[0].getColumns() == mats[1].getColumns()) {
+                double tempoA;
+                double tempoB;
+                double soustraction;
                 Matrice resultat = new Matrice("", mats[0].getColumns(), mats[0].getRows());
                 for (int i = 0; i < mats[0].getRows(); i++) {
                     for (int j = 0; j < mats[0].getColumns(); j++) {
-                        tempoA = (int) mats[0].getValue(j, i);
-                        tempoB = (int) mats[1].getValue(j, i);
+                        tempoA = mats[0].getValue(j, i);
+                        tempoB = mats[1].getValue(j, i);
                         soustraction = tempoA - tempoB;
                         resultat.setValue(soustraction, j, i);
                     }
@@ -249,6 +249,40 @@ public class Controller {
     }
 
     public void determinant() {
+        Matrice mat[] = getMatrices();
 
+        if (mat.length == 1) {
+            if (mat[0].getColumns() == mat[0].getRows()) {
+                if (mat[0].getRows() != 1) {
+                    Double[] depart = new Double[mat[0].getRows()];
+                    Matrice[] matDepart = new Matrice[mat[0].getRows()];
+
+                    for (int i = 0; i < mat[0].getRows(); i++) {
+                        depart[i] = mat[0].getValue(i, 0);
+                        matDepart[i] = mineur(mat[0], 0, i);
+                    }
+
+
+
+                } else
+                    textArea.setText("Det(" + mat[0].getNom() + ") = " + mat[0].getValue(0, 0));
+            } else
+                textArea.setText("La matrice doit être carrée pour pouvoir calculer son déterminant");
+        } else
+            textArea.setText("Vous devez entrer une seule matrice pour calculer son déterminant");
+    }
+
+    private Matrice mineur(Matrice matrice, int rowToRemove, int columnToRemove) {
+        Matrice resultat = new Matrice("", matrice.getColumns() - 1, matrice.getRows() - 1);
+
+        for (int i = 0; i < matrice.getRows(); i++) {
+            if (i != rowToRemove) {
+                for (int j = 0; j < matrice.getColumns(); j++) {
+                    if (j != columnToRemove)
+                        resultat.setValue(matrice.getValue(j, i), j, i);
+                }
+            }
+        }
+        return resultat;
     }
 }
