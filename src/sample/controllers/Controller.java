@@ -109,7 +109,7 @@ public class Controller {
         for (int i = 0; i < (int) spinnerLignes.getValue(); i++) {
             for (int j = 0; j < (int) spinnerColonnes.getValue(); j++) {
                 if (!textFields.get(value).getText().isEmpty())
-                    tempo.setValue(Float.parseFloat(textFields.get(value).getText()), j, i);
+                    tempo.setValue(Double.parseDouble(textFields.get(value).getText()), j, i);
                 else
                     tempo.setValue(0, j, i);
 
@@ -121,7 +121,7 @@ public class Controller {
 
     }
 
-    public void setChoiceBox() {
+    private void setChoiceBox() {
         hBox.getChildren().clear();
 
         observableList = FXCollections.observableList((List) listeNoms);
@@ -166,7 +166,7 @@ public class Controller {
         Matrice mats[] = getMatrices();
 
         if (mats.length == 2) {
-            if (mats[0].getRows() == mats[1].getRows() && mats[0].getColumns() == mats[0].getColumns()) {
+            if (mats[0].getRows() == mats[1].getRows() && mats[0].getColumns() == mats[1].getColumns()) {
                 int tempoA;
                 int tempoB;
                 int addition;
@@ -193,7 +193,7 @@ public class Controller {
         Matrice mats[] = getMatrices();
 
         if (mats.length == 2) {
-            if (mats[0].getRows() == mats[1].getRows() && mats[0].getColumns() == mats[0].getColumns()) {
+            if (mats[0].getRows() == mats[1].getRows() && mats[0].getColumns() == mats[1].getColumns()) {
                 int tempoA;
                 int tempoB;
                 int soustraction;
@@ -218,6 +218,28 @@ public class Controller {
 
     public void multScalaire() {
 
+        Matrice mats[] = getMatrices();
+        if (mats.length >= 1) {
+
+            TextInputDialog alerte = new TextInputDialog(" Entrez le scalaire");
+            alerte.setTitle("Multiplication par un scalaire");
+            alerte.setHeaderText("Veuilles entrer le scalaire");
+            alerte.setContentText("Scalaire : ");
+            String scalaire = alerte.showAndWait().get();
+            int multiplicateur = Integer.parseInt(scalaire);
+
+
+            Matrice resultat = new Matrice("", mats[0].getColumns(), mats[0].getRows());
+            for (int i = 0; i < mats[0].getRows(); i++) {
+                for (int j = 0; j < mats[0].getColumns(); j++) {
+                    int element = (int) mats[0].getValue(j, i);
+                    resultat.setValue(multiplicateur * element, j, i);
+                }
+            }
+            textArea.setText(resultat.toString());
+        } else {
+            textArea.setText("Vous devez entrer une seule matrice à multiplier");
+        }
     }
 
     public void puissance() {
@@ -225,7 +247,10 @@ public class Controller {
     }
 
     public void transposee() {
-
+        Matrice mats[] = getMatrices();
+        if (mats.length >= 1) {
+            textArea.setText(mats[0].toString());
+        }
     }
 
     public void inversion() {
@@ -233,7 +258,26 @@ public class Controller {
     }
 
     public void produitMat() {
+        int valeur = 0;
+        Matrice mats[] = getMatrices();
+        if (mats[0].getColumns() == mats[1].getRows()) {
+            Matrice resultat = new Matrice("", mats[1].getColumns(), mats[0].getRows());
 
+            for (int i = 0; i < resultat.getRows(); i++) {
+                for (int j = 0; j < resultat.getColumns(); j++) {
+                    double calculee=0;
+                    for (int k = 0; k < mats[0].getColumns(); k++) {
+                        calculee+=(mats[0].getValue(k,valeur) * mats[1].getValue(valeur,k));///???
+                        resultat.setValue( calculee, j, i);
+                        valeur++;
+                    }
+
+                    valeur = 0;
+                }
+
+            }
+            textArea.setText(resultat.toString());
+        } else textArea.setText("Matrices incompatibles");
     }
 
     public void produitVect() {
