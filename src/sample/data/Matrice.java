@@ -5,17 +5,6 @@ import java.util.ArrayList;
 public class Matrice {
     private String nom;
 
-    private int columns, rows;
-    private double tableau[][];
-
-    public Matrice(String nom, int columns, int rows) {
-        this.nom = nom;
-        this.columns = columns;
-        this.rows = rows;
-
-        tableau = new double[rows][columns];
-    }
-
     public int getColumns() {
         return columns;
     }
@@ -24,30 +13,39 @@ public class Matrice {
         return rows;
     }
 
+    private int columns, rows;
+    private double tableau[][];
+
+    public Matrice (String nom, int columns, int rows){
+        this.nom = nom;
+        this.columns = columns;
+        this.rows = rows;
+
+        tableau = new double[columns][rows];
+    }
+
     public String getNom() {
         return this.nom;
     }
 
-    public void setValue(double value, int column, int row) {
-        tableau[row][column] = value;
+    public void setValue(double value, int column, int row)  {
+        tableau[column][row] = value;
     }
 
-    public double getValue(int colonne, int row) {
+    public double getValue(int colonne, int row){
         return tableau[colonne][row];
-    }
-
-    public String toString() {
-        ArrayList<String> resultat = new ArrayList<>();
-        String matrice = "[";
-        for (int i = 0; i < this.getColumns(); i++) {
-            for (int j = 0; j < this.getRows(); j++) {
-                matrice += (int) this.getValue(j, i) + ",";
+    };
+    public String toString(){
+        String matrice= "[";
+        for(int i=0;i<this.getRows();i++){
+            for(int j=0;j<this.getColumns();j++){
+                matrice+= (int)this.getValue(j,i)+",";
             }
 
-            if (i == rows - 1)
-                matrice += "]";
+            if(i==rows-1)
+                matrice+="]";
             else
-                matrice += "\n";
+            matrice+="\n";
         }
         return matrice;
     }

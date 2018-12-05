@@ -4,10 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -36,6 +33,9 @@ public class Controller {
     @FXML
     private HBox hBox;
 
+    @FXML
+    private TextArea textArea;
+
     public void initialize() {
         listeNoms.add("");
         hBox.setSpacing(10);
@@ -57,7 +57,7 @@ public class Controller {
         gridPane.getChildren().clear();
         textFields.clear();
 
-        gridPane.setMaxSize((int) spinnerColonnes.getValue()*tfWidth, (int) spinnerLignes.getValue()*tfHeight );
+        gridPane.setMaxSize((int) spinnerColonnes.getValue() * tfWidth, (int) spinnerLignes.getValue() * tfHeight);
 
         for (int y = 0; y < (int) spinnerLignes.getValue(); y++) {
             for (int x = 0; x < (int) spinnerColonnes.getValue(); x++) {
@@ -80,7 +80,7 @@ public class Controller {
     }
 
     public void ajouterMatrice() {
-        String resultat = "";
+        String resultat = "", texte = "Veuillez entrer le nom de la matrice";
         boolean notNew = true;
 
         while (notNew) {
@@ -89,12 +89,16 @@ public class Controller {
             TextInputDialog alerte = new TextInputDialog("Entrez ici");
 
             alerte.setTitle("Nom de matrice");
-            alerte.setHeaderText("Veuillez entrer le nom de la matrice");
+            alerte.setHeaderText(texte);
             alerte.setContentText("Nom: ");
             resultat = alerte.showAndWait().get();
 
-            for (String nom : listeNoms)
-                if (nom.equals(resultat) || resultat.isEmpty()) notNew = true;
+            for (String nom : listeNoms) {
+                if (nom.equals(resultat) || resultat.isEmpty()) {
+                    notNew = true;
+                    texte = "Veuillez entrer un nom valide";
+                }
+            }
         }
 
         listeNoms.add(resultat);
@@ -102,10 +106,10 @@ public class Controller {
         Matrice tempo = new Matrice(resultat, (int) spinnerColonnes.getValue(), (int) spinnerLignes.getValue());
 
         int value = 0;
-        for(int i = 0; i < (int) spinnerLignes.getValue() ;i++){
-            for(int j = 0; j < (int) spinnerColonnes.getValue(); j++) {
+        for (int i = 0; i < (int) spinnerLignes.getValue(); i++) {
+            for (int j = 0; j < (int) spinnerColonnes.getValue(); j++) {
                 if (!textFields.get(value).getText().isEmpty())
-                    tempo.setValue(Float.parseFloat(textFields.get(value).getText()), j, i);
+                    tempo.setValue(Double.parseDouble(textFields.get(value).getText()), j, i);
                 else
                     tempo.setValue(0, j, i);
 
@@ -113,85 +117,11 @@ public class Controller {
             }
         }
         setChoiceBox();
-        map.put(resultat,tempo);
-
-    }
-    public String addition( Matrice as, Matrice bs ){
-
-        if(as.getRows()==bs.getRows()&&as.getColumns()==as.getColumns())
-        { int tempoa;
-            int tempob;
-            int addition;
-            Matrice resultat=new Matrice("",as.getColumns(), as.getRows());
-            for(int i=0; i<as.getRows();i++){
-                for(int j=0; j<as.getColumns();j++){
-                    tempoa=(int)as.getValue(j,i);
-                    tempob=(int)bs.getValue(j,i);
-                    addition= tempoa+tempob;
-                    resultat.setValue(addition,j,i);
-                }
-            }
-            String finalle= resultat.toString();
-            return finalle;
-        }
-        else{
-            return "Les formats des matrices ne sont pas identiques.";
-        }
-
-    }
-    public String soustration( Matrice as, Matrice bs ){
-
-        if(as.getRows()==bs.getRows()&&as.getColumns()==as.getColumns())
-        { int tempoa;
-            int tempob;
-            int soustraction;
-            Matrice resultat=new Matrice("",as.getColumns(), as.getRows());
-            for(int i=0; i<as.getRows();i++){
-                for(int j=0; j<as.getColumns();j++){
-                    tempoa=(int)as.getValue(j,i);
-                    tempob=(int)bs.getValue(j,i);
-                    soustraction= tempoa-tempob;
-                    resultat.setValue(soustraction,j,i);
-                }
-            }
-            String finalle= resultat.toString();
-            return finalle;
-        }
-        else{
-            return "Les formats des matrices ne sont pas identiques.";
-        }
-
-    }
-    public String multiplierScalaire(int nombre, Matrice initiale) {
-        Matrice resultat= new Matrice("",initiale.getColumns(),initiale.getRows());
-        for(int i=0; i<initiale.getRows();i++){
-            for(int j=0;j<initiale.getColumns();j++){
-                int temporaire= (int)initiale.getValue(j,i)*nombre;
-                resultat.setValue(temporaire,j,i);
-            }
-        }
-        String finalle=resultat.toString();
-        return finalle;
-    }
-    public String produitMatriciel(Matrice a,Matrice b){
-
-        if(a.getColumns()==b.getRows()){
-            Matrice resultat = new Matrice("",b.getColumns(),a.getRows());
-            for(int i=0;i<a.getRows();i++){
-                for(int j=0;j<a.getColumns();j++){
-                }
-            }
-        }
-
-
-        return new String();
-    }
-
-    public void getMatrice() {
+        map.put(resultat, tempo);
 
     }
 
-    public void setChoiceBox() {
+    private void setChoiceBox() {
         hBox.getChildren().clear();
 
         observableList = FXCollections.observableList((List) listeNoms);
@@ -214,5 +144,155 @@ public class Controller {
         choixDroite.setPrefHeight(25);
 
         hBox.getChildren().addAll(choixGauche, choixDroite);
+    }
+
+    public Matrice[] getMatrices() {
+        if (choixGauche.getValue().isEmpty() && choixDroite.getValue().isEmpty()) {
+            Alert alerte = new Alert(Alert.AlertType.INFORMATION);
+            alerte.setTitle("Erreur");
+            alerte.setHeaderText("Aucune matrice entrée");
+            alerte.setContentText("Veuillez entrer des matrices valides");
+            alerte.showAndWait();
+            return null;
+        } else if (choixGauche.getValue().isEmpty())
+            return new Matrice[]{map.get(choixDroite.getValue())};
+        else if (choixDroite.getValue().isEmpty())
+            return new Matrice[]{map.get(choixGauche.getValue())};
+        else
+            return new Matrice[]{map.get(choixGauche.getValue()), map.get(choixDroite.getValue())};
+    }
+
+    public void addition() {
+        Matrice mats[] = getMatrices();
+
+        if (mats.length == 2) {
+            if (mats[0].getRows() == mats[1].getRows() && mats[0].getColumns() == mats[1].getColumns()) {
+                int tempoA;
+                int tempoB;
+                int addition;
+                Matrice resultat = new Matrice("", mats[0].getColumns(), mats[0].getRows());
+                for (int i = 0; i < mats[0].getRows(); i++) {
+                    for (int j = 0; j < mats[0].getColumns(); j++) {
+                        tempoA = (int) mats[0].getValue(j, i);
+                        tempoB = (int) mats[1].getValue(j, i);
+                        addition = tempoA + tempoB;
+                        resultat.setValue(addition, j, i);
+                    }
+                }
+                String resultatTexte = mats[0].getNom() + " + " + mats[1].getNom() + " = \n" + resultat.toString();
+                textArea.setText(resultatTexte);
+            } else {
+                textArea.setText("Les formats des matrices ne sont pas identiques");
+            }
+        } else {
+            textArea.setText("Veuillez entrer deux matrices");
+        }
+    }
+
+    public void soustraction() {
+        Matrice mats[] = getMatrices();
+
+        if (mats.length == 2) {
+            if (mats[0].getRows() == mats[1].getRows() && mats[0].getColumns() == mats[1].getColumns()) {
+                int tempoA;
+                int tempoB;
+                int soustraction;
+                Matrice resultat = new Matrice("", mats[0].getColumns(), mats[0].getRows());
+                for (int i = 0; i < mats[0].getRows(); i++) {
+                    for (int j = 0; j < mats[0].getColumns(); j++) {
+                        tempoA = (int) mats[0].getValue(j, i);
+                        tempoB = (int) mats[1].getValue(j, i);
+                        soustraction = tempoA - tempoB;
+                        resultat.setValue(soustraction, j, i);
+                    }
+                }
+                String resultatTexte = mats[0].getNom() + " + " + mats[1].getNom() + " = \n" + resultat.toString();
+                textArea.setText(resultatTexte);
+            } else {
+                textArea.setText("Les formats des matrices ne sont pas identiques");
+            }
+        } else {
+            textArea.setText("Veuillez entrer deux matrices");
+        }
+    }
+
+    public void multScalaire() {
+
+        Matrice mats[] = getMatrices();
+        if (mats.length >= 1) {
+
+            TextInputDialog alerte = new TextInputDialog(" Entrez le scalaire");
+            alerte.setTitle("Multiplication par un scalaire");
+            alerte.setHeaderText("Veuilles entrer le scalaire");
+            alerte.setContentText("Scalaire : ");
+            String scalaire = alerte.showAndWait().get();
+            int multiplicateur = Integer.parseInt(scalaire);
+
+
+            Matrice resultat = new Matrice("", mats[0].getColumns(), mats[0].getRows());
+            for (int i = 0; i < mats[0].getRows(); i++) {
+                for (int j = 0; j < mats[0].getColumns(); j++) {
+                    int element = (int) mats[0].getValue(j, i);
+                    resultat.setValue(multiplicateur * element, j, i);
+                }
+            }
+            textArea.setText(resultat.toString());
+        } else {
+            textArea.setText("Vous devez entrer une seule matrice à multiplier");
+        }
+    }
+
+    public void puissance() {
+
+    }
+
+    public void transposee() {
+        Matrice mats[] = getMatrices();
+        if (mats.length >= 1) {
+            textArea.setText(mats[0].toString());
+        }
+    }
+
+    public void inversion() {
+
+    }
+
+    public void produitMat() {
+        int valeur = 0;
+        Matrice mats[] = getMatrices();
+        if (mats[0].getColumns() == mats[1].getRows()) {
+            Matrice resultat = new Matrice("", mats[1].getColumns(), mats[0].getRows());
+
+            for (int i = 0; i < resultat.getRows(); i++) {
+                for (int j = 0; j < resultat.getColumns(); j++) {
+                    double calculee=0;
+                    for (int k = 0; k < mats[0].getColumns(); k++) {
+                        calculee+=(mats[0].getValue(k,valeur) * mats[1].getValue(valeur,k));///???
+                        resultat.setValue( calculee, j, i);
+                        valeur++;
+                    }
+
+                    valeur = 0;
+                }
+
+            }
+            textArea.setText(resultat.toString());
+        } else textArea.setText("Matrices incompatibles");
+    }
+
+    public void produitVect() {
+
+    }
+
+    public void produitHad() {
+
+    }
+
+    public void produitTens() {
+
+    }
+
+    public void determinant() {
+
     }
 }
