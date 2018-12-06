@@ -223,7 +223,7 @@ public class Controller {
 
             TextInputDialog alerte = new TextInputDialog(" Entrez le scalaire");
             alerte.setTitle("Multiplication par un scalaire");
-            alerte.setHeaderText("Veuilles entrer le scalaire");
+            alerte.setHeaderText("Veuillez entrer le scalaire");
             alerte.setContentText("Scalaire : ");
             String scalaire = alerte.showAndWait().get();
             int multiplicateur = Integer.parseInt(scalaire);
@@ -247,10 +247,7 @@ public class Controller {
     }
 
     public void transposee() {
-        Matrice mats[] = getMatrices();
-        if (mats.length >= 1) {
-            textArea.setText(mats[0].toString());
-        }
+
     }
 
     public void inversion() {
@@ -265,10 +262,10 @@ public class Controller {
 
             for (int i = 0; i < resultat.getRows(); i++) {
                 for (int j = 0; j < resultat.getColumns(); j++) {
-                    double calculee=0;
+                    double calculee = 0;
                     for (int k = 0; k < mats[0].getColumns(); k++) {
-                        calculee+=(mats[0].getValue(k,valeur) * mats[1].getValue(valeur,k));///???
-                        resultat.setValue( calculee, j, i);
+                        calculee += (mats[0].getValue(k, valeur) * mats[1].getValue(valeur, k));///???
+                        resultat.setValue(calculee, j, i);
                         valeur++;
                     }
 
@@ -293,6 +290,57 @@ public class Controller {
     }
 
     public void determinant() {
+        Matrice mat[] = getMatrices();
 
+        if (mat.length == 1) {
+            if (mat[0].getColumns() == mat[0].getRows()) {
+                if (mat[0].getColumns() == 1)
+                    textArea.setText("Det(" + mat[0].getNom() + ") = " + mat[0].getValue(0, 0));
+
+                else if (mat[0].getColumns() == 2)
+                    textArea.setText("Det(" + mat[0].getNom() + ") = " + determinantDparD(mat[0]));
+
+                else if (mat[0].getRows() > 2) {
+
+                    double valeurs[] = new double[mat[0].getColumns()];
+                    Matrice mineurs[] = new Matrice[mat[0].getColumns()];
+
+                    for (int i = 0; i < mat[0].getColumns(); i++) {
+                        valeurs[i] = mat[0].getValue(i, 0);
+                        mineurs[i] = mineur(mat[0], i);
+                    }
+
+                    double resultat = 0;
+                    for (int i = 0; i < valeurs.length; i++) {
+                        resultat += valeurs[i] * Math.pow(-1, i + 2) * determinantDparD(mineurs[i]);
+                    }
+
+                    textArea.setText("Det(" + mat[0].getNom() + ") = " + resultat);
+                }
+            } else
+                textArea.setText("La matrice doit être carrée pour pouvoir calculer son déterminant");
+        } else
+            textArea.setText("Vous devez entrer une seule matrice pour calculer son déterminant");
+    }
+
+    private double determinantDparD(Matrice matrice) {
+        return (matrice.getValue(0, 0) * matrice.getValue(1, 1)) - (matrice.getValue(1, 0) * matrice.getValue(0, 1));
+    }
+
+    private Matrice mineur(Matrice matrice, int columnToRemove) {
+        Matrice resultat = new Matrice("", matrice.getColumns() - 1, matrice.getRows() - 1);
+
+        for (int i = 1; i < matrice.getRows(); i++) {
+            for (int j = 0; j < matrice.getColumns(); j++) {
+                if (j != columnToRemove) {
+                    if (j == 0 || (j >= 1 && columnToRemove == matrice.getColumns() - 1)) {
+                        resultat.setValue(matrice.getValue(j, i), j, i - 1);
+                    }
+                    else
+                        resultat.setValue(matrice.getValue(j, i), j - 1, i - 1);
+                }
+            }
+        }
+        return resultat;
     }
 }
