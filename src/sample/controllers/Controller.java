@@ -109,7 +109,7 @@ public class Controller {
         for (int i = 0; i < (int) spinnerLignes.getValue(); i++) {
             for (int j = 0; j < (int) spinnerColonnes.getValue(); j++) {
                 if (!textFields.get(value).getText().isEmpty())
-                    tempo.setValue(Float.parseFloat(textFields.get(value).getText()), j, i);
+                    tempo.setValue(Double.parseDouble(textFields.get(value).getText()), j, i);
                 else
                     tempo.setValue(0, j, i);
 
@@ -121,7 +121,7 @@ public class Controller {
 
     }
 
-    public void setChoiceBox() {
+    private void setChoiceBox() {
         hBox.getChildren().clear();
 
         observableList = FXCollections.observableList((List) listeNoms);
@@ -242,12 +242,55 @@ public class Controller {
         }
     }
 
-    public void puissance() {
+    public void puissance() { //Pas terminée
 
+        ArrayList<Matrice> liste=new ArrayList<>();
+        Matrice mats[] = getMatrices();
+        if(mats.length==1){
+
+            TextInputDialog alerte = new TextInputDialog(" Entrez l'exposant");
+            alerte.setTitle("Multiplication par un exposant");
+            alerte.setHeaderText("Veuilles entrer le exposant");
+            alerte.setContentText("Exposant : ");
+            String exposant = alerte.showAndWait().get();
+            int exp = Integer.parseInt(exposant);
+            int valeur=0;
+
+            while(exp-Math.pow(2,valeur)>0){
+                valeur++;
+            }
+            if(exp-Math.pow(2,valeur)<0)
+            {
+                valeur--;
+            }
+            System.out.println(valeur);
+
+         for(int i=0;i<valeur+1;i++){
+             mats[1]=mats[0];
+             produitMat();
+         }
+
+        }
     }
 
     public void transposee() {
+        Matrice mats[] = getMatrices();
 
+        if (mats.length == 1) {
+            Matrice resultat = new Matrice("", mats[0].getColumns(), mats[0].getRows());
+            for(int i=0;i<mats[0].getRows();i++){
+                for(int j=0;j<mats[0].getColumns();j++){
+                    double transpo=mats[0].getValue(i,j);
+                    resultat.setValue(transpo,j,i);
+                }
+            }
+            textArea.setText(resultat.toString());
+        }
+        if(mats.length==2){
+            textArea.setText("Veuillez entrer une seule matrice");
+        }
+        if(mats.length==0)
+            textArea.setText("Veuillez entrer une matrice à transposer");
     }
 
     public void inversion() {
@@ -266,12 +309,11 @@ public class Controller {
                     for (int k = 0; k < mats[0].getColumns(); k++) {
                         calculee += (mats[0].getValue(k, valeur) * mats[1].getValue(valeur, k));///???
                         resultat.setValue(calculee, j, i);
-                        valeur++;
                     }
+                    valeur++;
 
-                    valeur = 0;
                 }
-
+                valeur = 0;
             }
             textArea.setText(resultat.toString());
         } else textArea.setText("Matrices incompatibles");
