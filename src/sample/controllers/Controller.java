@@ -109,7 +109,7 @@ public class Controller {
         for (int i = 0; i < (int) spinnerLignes.getValue(); i++) {
             for (int j = 0; j < (int) spinnerColonnes.getValue(); j++) {
                 if (!textFields.get(value).getText().isEmpty())
-                    tempo.setValue(Double.parseDouble(textFields.get(value).getText()), j, i);
+                    tempo.setValue(Float.parseFloat(textFields.get(value).getText()), j, i);
                 else
                     tempo.setValue(0, j, i);
 
@@ -121,7 +121,7 @@ public class Controller {
 
     }
 
-    private void setChoiceBox() {
+    public void setChoiceBox() {
         hBox.getChildren().clear();
 
         observableList = FXCollections.observableList((List) listeNoms);
@@ -166,7 +166,7 @@ public class Controller {
         Matrice mats[] = getMatrices();
 
         if (mats.length == 2) {
-            if (mats[0].getRows() == mats[1].getRows() && mats[0].getColumns() == mats[1].getColumns()) {
+            if (mats[0].getRows() == mats[1].getRows() && mats[0].getColumns() == mats[0].getColumns()) {
                 int tempoA;
                 int tempoB;
                 int addition;
@@ -193,7 +193,7 @@ public class Controller {
         Matrice mats[] = getMatrices();
 
         if (mats.length == 2) {
-            if (mats[0].getRows() == mats[1].getRows() && mats[0].getColumns() == mats[1].getColumns()) {
+            if (mats[0].getRows() == mats[1].getRows() && mats[0].getColumns() == mats[0].getColumns()) {
                 int tempoA;
                 int tempoB;
                 int soustraction;
