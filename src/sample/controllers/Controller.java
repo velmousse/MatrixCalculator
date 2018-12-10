@@ -409,17 +409,16 @@ public class Controller {
             }
 
             if (mineurs[0].getColumns() > 2) {
-                for (int i = 0; i < mineurs.length; i++) {
+                for (int i = 0; i < mineurs.length; i++)
                     determinantDparD[i] = determinantSuperieur(mineurs[i]);
-                }
+
             } else if (mineurs[0].getColumns() == 2) {
                 for (int i = 0; i < mineurs.length; i++)
                     determinantDparD[i] = (mineurs[i].getValue(0, 0) * mineurs[i].getValue(1, 1)) - (mineurs[i].getValue(1, 0) * mineurs[i].getValue(0, 1));
             }
 
-            for (int i = 0; i < valeurs.length; i++) {
+            for (int i = 0; i < valeurs.length; i++)
                 resultat += valeurs[i] * Math.pow(-1, i + 2) * determinantDparD[i];
-            }
 
             textArea.setText("Det(" + matrice.getNom() + ") = " + resultat);
         }
