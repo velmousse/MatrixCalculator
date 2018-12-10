@@ -14,38 +14,41 @@ public class Matrice {
     }
 
     private int columns, rows;
-    private double tableau[][];
+    private float tableau[][];
 
-    public Matrice (String nom, int columns, int rows){
+    public Matrice(String nom, int columns, int rows) {
         this.nom = nom;
         this.columns = columns;
         this.rows = rows;
 
-        tableau = new double[columns][rows];
+        tableau = new float[columns][rows];
     }
 
     public String getNom() {
         return this.nom;
     }
 
-    public void setValue(double value, int column, int row)  {
+    public void setValue(float value, int column, int row) {
         tableau[column][row] = value;
     }
 
-    public double getValue(int colonne, int row){
+    public float getValue(int colonne, int row) {
         return tableau[colonne][row];
-    };
-    public String toString(){
-        String matrice= "[";
-        for(int i=0;i<this.getRows();i++){
-            for(int j=0;j<this.getColumns();j++){
-                matrice+= (int)this.getValue(j,i)+",";
+    }
+
+    public String toString() {
+        String matrice = "[ ";
+        for (int i = 0; i < this.getRows(); i++) {
+            for (int j = 0; j < this.getColumns(); j++) {
+                matrice += this.getValue(j, i);
+                if (j != this.getColumns() - 1)
+                    matrice += ", ";
             }
 
-            if(i==rows-1)
-                matrice+="]";
+            if (i == rows - 1)
+                matrice += "]";
             else
-            matrice+="\n";
+                matrice += "\n ";
         }
         return matrice;
     }

@@ -107,7 +107,7 @@ public class Controller {
         for (int i = 0; i < (int) spinnerLignes.getValue(); i++) {
             for (int j = 0; j < (int) spinnerColonnes.getValue(); j++) {
                 if (!textFields.get(value).getText().isEmpty())
-                    tempo.setValue(Double.parseDouble(textFields.get(value).getText()), j, i);
+                    tempo.setValue(Float.parseFloat(textFields.get(value).getText()), j, i);
                 else
                     tempo.setValue(0, j, i);
 
@@ -165,14 +165,14 @@ public class Controller {
 
         if (mats.length == 2) {
             if (mats[0].getRows() == mats[1].getRows() && mats[0].getColumns() == mats[0].getColumns()) {
-                int tempoA;
-                int tempoB;
-                int addition;
+                float tempoA;
+                float tempoB;
+                float addition;
                 Matrice resultat = new Matrice("", mats[0].getColumns(), mats[0].getRows());
                 for (int i = 0; i < mats[0].getRows(); i++) {
                     for (int j = 0; j < mats[0].getColumns(); j++) {
-                        tempoA = (int) mats[0].getValue(j, i);
-                        tempoB = (int) mats[1].getValue(j, i);
+                        tempoA = mats[0].getValue(j, i);
+                        tempoB = mats[1].getValue(j, i);
                         addition = tempoA + tempoB;
                         resultat.setValue(addition, j, i);
                     }
@@ -192,14 +192,14 @@ public class Controller {
 
         if (mats.length == 2) {
             if (mats[0].getRows() == mats[1].getRows() && mats[0].getColumns() == mats[0].getColumns()) {
-                int tempoA;
-                int tempoB;
-                int soustraction;
+                float tempoA;
+                float tempoB;
+                float soustraction;
                 Matrice resultat = new Matrice("", mats[0].getColumns(), mats[0].getRows());
                 for (int i = 0; i < mats[0].getRows(); i++) {
                     for (int j = 0; j < mats[0].getColumns(); j++) {
-                        tempoA = (int) mats[0].getValue(j, i);
-                        tempoB = (int) mats[1].getValue(j, i);
+                        tempoA = mats[0].getValue(j, i);
+                        tempoB = mats[1].getValue(j, i);
                         soustraction = tempoA - tempoB;
                         resultat.setValue(soustraction, j, i);
                     }
@@ -215,34 +215,31 @@ public class Controller {
     }
 
     public void multScalaire() {
-
         Matrice mats[] = getMatrices();
-        if (mats.length >= 1)
-            multScalaireSuperieur(mats[0]);
-        else
-            textArea.setText("Vous devez entrer une seule matrice à multiplier");
-    }
-
-    private void multScalaireSuperieur(Matrice matrice) {
-        TextInputDialog alerte = new TextInputDialog(" Entrez le scalaire");
-        alerte.setTitle("Multiplication par un scalaire");
-        alerte.setHeaderText("Veuillez entrer le scalaire");
-        alerte.setContentText("Scalaire : ");
-        String scalaire = alerte.showAndWait().get();
-        int multiplicateur = Integer.parseInt(scalaire);
+        if (mats.length >= 1) {
+            TextInputDialog alerte = new TextInputDialog(" Entrez le scalaire");
+            alerte.setTitle("Multiplication par un scalaire");
+            alerte.setHeaderText("Veuillez entrer le scalaire");
+            alerte.setContentText("Scalaire : ");
+            String scalaire = alerte.showAndWait().get();
+            float multiplicateur = Float.parseFloat(scalaire);
 
 
-        Matrice resultat = new Matrice("", matrice.getColumns(), matrice.getRows());
-        for (int i = 0; i < matrice.getRows(); i++) {
-            for (int j = 0; j < matrice.getColumns(); j++) {
-                int element = (int) matrice.getValue(j, i);
-                resultat.setValue(multiplicateur * element, j, i);
+            Matrice resultat = new Matrice("", mats[0].getColumns(), mats[0].getRows());
+            for (int i = 0; i < mats[0].getRows(); i++) {
+                for (int j = 0; j < mats[0].getColumns(); j++) {
+                    float element = mats[0].getValue(j, i);
+                    resultat.setValue(multiplicateur * element, j, i);
+                }
             }
+            textArea.setText(resultat.toString());
+
+        } else {
+            textArea.setText("Vous devez entrer une seule matrice à multiplier");
         }
-        textArea.setText(resultat.toString());
     }
 
-    public void puissance() { //Pas terminée
+    public void puissance() { //Pas terminée    ******METTRE DES FLOATS
 
         ArrayList<Matrice> liste = new ArrayList<>();
         Matrice mats[] = getMatrices();
@@ -250,7 +247,7 @@ public class Controller {
 
             TextInputDialog alerte = new TextInputDialog(" Entrez l'exposant");
             alerte.setTitle("Multiplication par un exposant");
-            alerte.setHeaderText("Veuillez entrer l'exposant");
+            alerte.setHeaderText("Veuilles entrer le exposant");
             alerte.setContentText("Exposant : ");
             String exposant = alerte.showAndWait().get();
             int exp = Integer.parseInt(exposant);
@@ -268,7 +265,6 @@ public class Controller {
                 mats[1] = mats[0];
                 produitMat();
             }
-
         }
     }
 
@@ -279,7 +275,7 @@ public class Controller {
             Matrice resultat = new Matrice("", mats[0].getColumns(), mats[0].getRows());
             for (int i = 0; i < mats[0].getRows(); i++) {
                 for (int j = 0; j < mats[0].getColumns(); j++) {
-                    double transpo = mats[0].getValue(i, j);
+                    float transpo = mats[0].getValue(i, j);
                     resultat.setValue(transpo, j, i);
                 }
             }
@@ -293,7 +289,30 @@ public class Controller {
     }
 
     public void inversion() {
+        Matrice mats[] = getMatrices();
 
+        if (mats.length == 1) {
+            if (mats[0].getColumns() == mats[0].getRows()) {
+                Matrice matrice = mats[0];
+                Matrice inverse = new Matrice("", matrice.getColumns(), matrice.getRows());
+
+                float scalaire = (1 / determinantSuperieur(matrice));
+
+                if (scalaire == 0) {
+                    textArea.setText("Le déterminant de la matrice est nul, la matrice inverse est donc nulle");
+                } else {
+                    for (int i = 0; i < matrice.getRows(); i++) {
+                        for (int j = 0; j < matrice.getColumns(); j++) {
+                            float valeur = (float) (Math.pow(-1, (i + 1) + (j + 1))) * scalaire * determinantSuperieur(mineur(matrice, j, i));
+                            inverse.setValue(valeur, i, j); //Transposée de la matrice des cofacteurs**********
+                        }
+                    }
+                    textArea.setText(matrice.getNom() + "^-1 = \n" + inverse.toString());
+                }
+            } else
+                textArea.setText("La matrice doit être carrée");
+        } else
+            textArea.setText("Vous devez sélectionner une seule matrice");
     }
 
     public void produitMat() {
@@ -304,7 +323,7 @@ public class Controller {
 
             for (int i = 0; i < resultat.getRows(); i++) {
                 for (int j = 0; j < resultat.getColumns(); j++) {
-                    double calculee = 0;
+                    float calculee = 0;
                     for (int k = 0; k < mats[0].getColumns(); k++) {
                         calculee += (mats[0].getValue(k, valeur) * mats[1].getValue(valeur, k));///???
                         resultat.setValue(calculee, j, i);
@@ -319,11 +338,41 @@ public class Controller {
     }
 
     public void produitVect() {
+        Matrice mats[] = getMatrices();
 
+        if (mats.length == 2) {
+            if (mats[0].getRows() == mats[1].getRows() && mats[0].getColumns() == mats[1].getColumns()) {
+                if (mats[0].getRows() == 1 && mats[0].getColumns() == 3) {
+                    Matrice resultat = new Matrice("", 3, 1);
+                    resultat.setValue((mats[0].getValue(1, 0) * mats[1].getValue(2, 0)) - (mats[0].getValue(2, 0) * mats[1].getValue(1, 0)), 0, 0);
+                    resultat.setValue(-((mats[0].getValue(0, 0) * mats[1].getValue(2, 0)) - (mats[0].getValue(2, 0) * mats[1].getValue(0, 0))), 1, 0);
+                    resultat.setValue((mats[0].getValue(0, 0) * mats[1].getValue(1, 0)) - (mats[0].getValue(1, 0) * mats[1].getValue(0, 0)), 2, 0);
+                    textArea.setText(mats[0].getNom() + " x " + mats[1].getNom() + " = " + resultat.toString());
+                } else
+                    textArea.setText("Des vecteurs doivent être entrés");
+            } else
+                textArea.setText("Les matrices doivent être de même format");
+        } else
+            textArea.setText("Deux vecteurs de format 1x3 doivent être entrés");
     }
 
     public void produitHad() {
+        Matrice mats[] = getMatrices();
 
+        if (mats.length == 2) {
+            if (mats[0].getColumns() == mats[1].getColumns() && mats[0].getRows() == mats[1].getRows()) {
+                Matrice resultat = new Matrice("", mats[0].getColumns(), mats[0].getRows());
+
+                for (int i = 0; i < mats[0].getRows(); i++) {
+                    for (int j = 0; j < mats[0].getColumns(); j++) {
+                        resultat.setValue(mats[0].getValue(j, i) * mats[1].getValue(j, i), j, i);
+                        textArea.setText(resultat.toString());
+                    }
+                }
+            } else
+                textArea.setText("Matrices incompatibles");
+        } else
+            textArea.setText("Deux matrices sont nécessaires");
     }
 
     public void produitTens() {
@@ -334,56 +383,71 @@ public class Controller {
         Matrice mat[] = getMatrices();
 
         if (mat.length == 1) {
-            if (mat[0].getColumns() == mat[0].getRows()) {
-                if (mat[0].getColumns() == 1)
-                    textArea.setText("Det(" + mat[0].getNom() + ") = " + mat[0].getValue(0, 0));
-                else if (mat[0].getColumns() == 2)
-                    textArea.setText("Det(" + mat[0].getNom() + ") = " + ((mat[0].getValue(0, 0) * mat[0].getValue(1, 1)) - (mat[0].getValue(1, 0) * mat[0].getValue(0, 1))));
-                else if (mat[0].getRows() > 2)
-                    determinantSupeieur(mat[0], true);
-            } else
-                textArea.setText("La matrice doit être carrée pour pouvoir calculer son déterminant");
+            determinantSuperieur(mat[0]);
         } else
             textArea.setText("Vous devez entrer une seule matrice pour calculer son déterminant");
     }
 
-    private double determinantSupeieur(Matrice matrice, boolean texte) {
-        double valeurs[] = new double[matrice.getColumns()];
-        double determinantDparD[] = new double[matrice.getColumns()];
-        Matrice mineurs[] = new Matrice[matrice.getColumns()];
+    private float determinantSuperieur(Matrice matrice) {
+        float resultat = 0;
 
-        for (int i = 0; i < matrice.getColumns(); i++) {
-            valeurs[i] = matrice.getValue(i, 0);
+        if (matrice.getColumns() == 1) {
+            resultat = matrice.getValue(0, 0);
+            textArea.setText("Det(" + matrice.getNom() + ") = " + resultat);
+        } else if (matrice.getColumns() == 2) {
+            resultat = (matrice.getValue(0, 0) * matrice.getValue(1, 1)) - (matrice.getValue(1, 0) * matrice.getValue(0, 1));
+            textArea.setText("Det(" + matrice.getNom() + ") = " + resultat);
+        } else if (matrice.getColumns() > 2) {
 
-            mineurs[i] = new Matrice("", matrice.getColumns() - 1, matrice.getRows() - 1);
-            for (int a = 1; a < matrice.getRows(); a++) {
+            float valeurs[] = new float[matrice.getColumns()];
+            float determinantDparD[] = new float[matrice.getColumns()];
+            Matrice mineurs[] = new Matrice[matrice.getColumns()];
+
+            for (int i = 0; i < matrice.getColumns(); i++) {
+                valeurs[i] = matrice.getValue(i, 0);
+                mineurs[i] = mineur(matrice, i, 0);
+            }
+
+            if (mineurs[0].getColumns() > 2) {
+                for (int i = 0; i < mineurs.length; i++) {
+                    determinantDparD[i] = determinantSuperieur(mineurs[i]);
+                }
+            } else if (mineurs[0].getColumns() == 2) {
+                for (int i = 0; i < mineurs.length; i++)
+                    determinantDparD[i] = (mineurs[i].getValue(0, 0) * mineurs[i].getValue(1, 1)) - (mineurs[i].getValue(1, 0) * mineurs[i].getValue(0, 1));
+            }
+
+            for (int i = 0; i < valeurs.length; i++) {
+                resultat += valeurs[i] * Math.pow(-1, i + 2) * determinantDparD[i];
+            }
+
+            textArea.setText("Det(" + matrice.getNom() + ") = " + resultat);
+        }
+        return resultat;
+    }
+
+    private Matrice mineur(Matrice matrice, int columnToRemove, int rowToRemove) {
+        Matrice resultat = new Matrice("", matrice.getColumns() - 1, matrice.getRows() - 1);
+
+        for (int a = 0; a < matrice.getRows(); a++) {
+            if (a != rowToRemove) {
                 for (int b = 0; b < matrice.getColumns(); b++) {
-                    if (b != i) {
-                        if (b < i)
-                            mineurs[i].setValue(matrice.getValue(b, a), b, a - 1);
-                        else if (b > i)
-                            mineurs[i].setValue(matrice.getValue(b, a), b - 1, a - 1);
+                    if (b != columnToRemove) {
+                        if (b < columnToRemove) {
+                            if (a < rowToRemove)
+                                resultat.setValue(matrice.getValue(b, a), b, a);
+                            else if (a > rowToRemove)
+                                resultat.setValue(matrice.getValue(b, a), b, a - 1);
+                        } else if (b > columnToRemove) {
+                            if (a < rowToRemove)
+                                resultat.setValue(matrice.getValue(b, a), b - 1, a);
+                            else if (a > rowToRemove)
+                                resultat.setValue(matrice.getValue(b, a), b - 1, a - 1);
+                        }
                     }
                 }
             }
         }
-
-        if (mineurs[0].getColumns() > 2) {
-            for (int i = 0; i < mineurs.length; i++) {
-                determinantDparD[i] = determinantSupeieur(mineurs[i], false);
-            }
-        } else if (mineurs[0].getColumns() == 2) {
-            for (int i = 0; i < mineurs.length; i++)
-                determinantDparD[i] = (mineurs[i].getValue(0, 0) * mineurs[i].getValue(1, 1)) - (mineurs[i].getValue(1, 0) * mineurs[i].getValue(0, 1));
-        }
-
-        double resultat = 0;
-        for (int i = 0; i < valeurs.length; i++) {
-            resultat += valeurs[i] * Math.pow(-1, i + 2) * determinantDparD[i];
-        }
-
-        if (texte)
-            textArea.setText("Det(" + matrice.getNom() + ") = " + resultat);
         return resultat;
     }
 }
