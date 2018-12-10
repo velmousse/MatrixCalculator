@@ -272,11 +272,11 @@ public class Controller {
         Matrice mats[] = getMatrices();
 
         if (mats.length == 1) {
-            Matrice resultat = new Matrice("", mats[0].getColumns(), mats[0].getRows());
+            Matrice resultat = new Matrice("", mats[0].getRows(), mats[0].getColumns());
             for (int i = 0; i < mats[0].getRows(); i++) {
                 for (int j = 0; j < mats[0].getColumns(); j++) {
-                    float transpo = mats[0].getValue(i, j);
-                    resultat.setValue(transpo, j, i);
+                    float transpo = mats[0].getValue(j, i);
+                    resultat.setValue(transpo, i, j);
                 }
             }
             textArea.setText(resultat.toString());
@@ -298,13 +298,13 @@ public class Controller {
 
                 float scalaire = (1 / determinantSuperieur(matrice));
 
-                if (scalaire == 0) {
+                if (determinantSuperieur(matrice) == 0) {
                     textArea.setText("Le déterminant de la matrice est nul, la matrice inverse est donc nulle");
                 } else {
                     for (int i = 0; i < matrice.getRows(); i++) {
                         for (int j = 0; j < matrice.getColumns(); j++) {
                             float valeur = (float) (Math.pow(-1, (i + 1) + (j + 1))) * scalaire * determinantSuperieur(mineur(matrice, j, i));
-                            inverse.setValue(valeur, i, j); //Transposée de la matrice des cofacteurs**********
+                            inverse.setValue(valeur, i, j);
                         }
                     }
                     textArea.setText(matrice.getNom() + "^-1 = \n" + inverse.toString());
@@ -376,7 +376,47 @@ public class Controller {
     }
 
     public void produitTens() {
+        Matrice mats[] = getMatrices();
 
+        if (mats.length == 2) {
+            Matrice resultat = new Matrice("", mats[0].getColumns() * mats[1].getColumns(), mats[0].getRows() * mats[1].getRows());
+            int row = 0;
+            int column = 0;
+
+            int standingColumn = 0;
+            int standingRow = 0;
+
+            for (int i = 0; i < mats[0].getRows(); i++) {
+
+                for (int j = 0; j < mats[0].getColumns(); j++) {
+
+                    for (int a = 0; a < mats[1].getRows(); a++) {
+
+                        for (int b = 0; b < mats[1].getColumns(); b++) {
+
+                            float valeur = mats[0].getValue(j, i) * mats[1].getValue(b, a);
+
+                            resultat.setValue(valeur, column, row);
+
+                            column++;
+                        }
+                        row++;
+                        standingColumn += mats[1].getColumns() - 1;
+                        column = standingColumn;
+
+                    }
+
+                    column+=mats[1].getColumns();
+                    row=0;
+
+                }
+
+                row+=mats[1].getRows();
+                column=0;
+            }
+            textArea.setText(resultat.toString());
+        } else
+            textArea.setText("Veuillez entrer deux matrices");
     }
 
     public void determinant() {
