@@ -380,39 +380,20 @@ public class Controller {
 
         if (mats.length == 2) {
             Matrice resultat = new Matrice("", mats[0].getColumns() * mats[1].getColumns(), mats[0].getRows() * mats[1].getRows());
-            int row = 0;
-            int column = 0;
-
-            int standingColumn = 0;
-            int standingRow = 0;
+            int row = 0, column = 0;
 
             for (int i = 0; i < mats[0].getRows(); i++) {
-
                 for (int j = 0; j < mats[0].getColumns(); j++) {
-
+                    row = mats[1].getRows() * i;
                     for (int a = 0; a < mats[1].getRows(); a++) {
-
+                        column = mats[1].getColumns() * j;
                         for (int b = 0; b < mats[1].getColumns(); b++) {
-
-                            float valeur = mats[0].getValue(j, i) * mats[1].getValue(b, a);
-
-                            resultat.setValue(valeur, column, row);
-
+                            resultat.setValue(mats[0].getValue(j, i) * mats[1].getValue(b, a), column, row);
                             column++;
                         }
                         row++;
-                        standingColumn += mats[1].getColumns() - 1;
-                        column = standingColumn;
-
                     }
-
-                    column+=mats[1].getColumns();
-                    row=0;
-
                 }
-
-                row+=mats[1].getRows();
-                column=0;
             }
             textArea.setText(resultat.toString());
         } else
