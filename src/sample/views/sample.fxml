@@ -63,6 +63,7 @@
                         <Button fx:id="determinant" layoutX="316.0" layoutY="219.0" mnemonicParsing="false" onAction="#setDeterminant" prefHeight="50.0" prefWidth="90.0" text="Déterminant" />
                          <Button layoutX="31.0" layoutY="221.0" mnemonicParsing="false" onAction="#afficherMatrices" prefHeight="46.0" prefWidth="132.0" text="Afficher les matrices" />
                         <Button layoutX="31.0" layoutY="164.0" mnemonicParsing="false" onAction="#importerMatrice" prefHeight="44.0" prefWidth="132.0" text="Importer une matrice" />
+                        <Button layoutX="186.0" layoutY="221.0" mnemonicParsing="false" onAction="#imprimer" prefHeight="47.0" prefWidth="105.0" text="Imprimer" />
                      </children></Pane>
                   <TextArea fx:id="textArea" blendMode="DARKEN" editable="false" prefHeight="473.0" prefWidth="800.0" promptText="Les résultats s'afficheront ici" />
                </children>

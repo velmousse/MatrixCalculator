@@ -11,6 +11,9 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -19,6 +22,12 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import sample.data.Matrice;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -26,7 +35,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class Controller {
+public class Controller implements Printable {
     private HashMap<String, Matrice> map = new HashMap<>();
     private ArrayList<TextField> textFields = new ArrayList<>();
     private int tfWidth = 60, tfHeight = 30;
@@ -474,4 +483,29 @@ public class Controller {
                 textArea.setText("Veuillez entrer une seule matrice");
         } catch (NullPointerException e) {}
     }
-}
+    public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
+        if (pageIndex > 0) {
+            return NO_SUCH_PAGE;
+        }
+        int marge = 30;
+        int x = (int) pageFormat.getImageableX();
+        int y = (int) pageFormat.getImageableY();
+        int w = (int) pageFormat.getImageableWidth();
+        int h = (int) pageFormat.getImageableHeight();
+        graphics.drawString(textArea.getText(),50,50);
+        return PAGE_EXISTS;
+    }
+    public void imprimer(){
+        PrinterJob job = PrinterJob.getPrinterJob();
+        job.setPrintable(this::print);
+        boolean doPrint = job.printDialog();
+        if(doPrint) {
+            try {
+                job.print();
+            }
+            catch (PrinterException e1) {
+                e1.printStackTrace();
+            }
+        }
+    }
+    }
