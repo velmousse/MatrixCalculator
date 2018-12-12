@@ -15,8 +15,13 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import sample.data.Calculateur;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import sample.data.Matrice;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -226,17 +231,36 @@ public class Controller {
 
     public void importerMatrice() {
 
+        FileChooser fc= new FileChooser();
+        fc.setTitle("Veuillez sélectionner un fichier CSV");
+
+        fc.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter(
+                        "Fichiers CSV", "*.csv")
+        );
+        Stage stage= new Stage();
+        File fichier = fc.showOpenDialog(stage);
+        try {
+            BufferedReader entree = new BufferedReader(new FileReader(fichier.getPath()));
+            String newHello = new String(Files.readAllBytes(Paths.get(fichier.getPath())));
+            System.out.print(newHello);
+        }
+        catch (NullPointerException o){}
+        catch (FileNotFoundException o){}
+        catch (IOException p){}
+
     }
 
     public void afficherMatrices() {
         Matrice mats[] = getMatrices();
-
+        try{
         if (mats.length == 1 || mats[0] == mats[1])
             textArea.setText(mats[0].getNom() + " = \n" + mats[0].toString());
         else if (mats.length == 2)
             textArea.setText(mats[0].getNom() + " = \n" + mats[0].toString() + "\n\n" + mats[1].getNom() + " = \n" + mats[1].toString());
         else
-            textArea.setText("Veuillez entrer au moins une matrice");
+            textArea.setText("Veuillez entrer au moins une matrice");}
+            catch (NullPointerException o){}
     }
 
     public void setAddition() {
