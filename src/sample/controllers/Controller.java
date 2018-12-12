@@ -240,15 +240,45 @@ public class Controller {
         );
         Stage stage= new Stage();
         File fichier = fc.showOpenDialog(stage);
+        String ligne = new String();
+        ArrayList<String> liste =new ArrayList<>();
+
+
         try {
+
             BufferedReader entree = new BufferedReader(new FileReader(fichier.getPath()));
-            String newHello = new String(Files.readAllBytes(Paths.get(fichier.getPath())));
-            System.out.print(newHello);
+
+            while ((ligne = entree.readLine()) != null) {
+
+                liste.add(ligne);
+            }
+
+            String[] sizeColonnes= liste.get(0).split(",");
+            float valeur=0;
+            int nom1=1;
+            String nom= "importee "+nom1;
+            Matrice importee=new Matrice(nom,sizeColonnes.length,liste.size());
+
+            try {
+
+
+                for (int i = 0; i < importee.getRows(); i++) {
+                    for (int j = 0; j < importee.getColumns(); j++) {
+                        String [] donnees= liste.get(i).split(",");
+                        valeur=Float.parseFloat(donnees[j]);
+                        importee.setValue(valeur,j,i);
+                    }
+                }
+                listeNoms.add(importee.getNom());
+                map.put(importee.getNom(),importee);
+                setChoiceBox();
+                nom1++;
+            }
+            catch (ArrayIndexOutOfBoundsException o){textArea.setText("Format de fichier invalide");}
         }
         catch (NullPointerException o){}
         catch (FileNotFoundException o){}
         catch (IOException p){}
-
     }
 
     public void afficherMatrices() {
