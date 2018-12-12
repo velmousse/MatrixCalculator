@@ -1,7 +1,5 @@
 package sample.data;
 
-import java.util.ArrayList;
-
 public class Matrice {
     private String nom;
 
