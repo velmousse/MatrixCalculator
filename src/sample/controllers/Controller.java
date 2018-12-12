@@ -232,14 +232,6 @@ public class Controller {
             textArea.setText("Veuillez entrer au moins une matrice");
     }
 
-
-
-
-
-
-
-
-
     public void setAddition() {
         Matrice mats[] = getMatrices();
         if (mats.length == 2) {
@@ -424,7 +416,7 @@ public class Controller {
             textArea.setText("Veuillez entrer une seule matrice");
     }
 
-    private Matrice additionSoustraction(boolean addition, Matrice matrice1, Matrice matrice2) {
+    public Matrice additionSoustraction(boolean addition, Matrice matrice1, Matrice matrice2) {
         Matrice resultat = new Matrice("", matrice1.getColumns(), matrice1.getRows());
         for (int i = 0; i < matrice1.getRows(); i++) {
             for (int j = 0; j < matrice1.getColumns(); j++) {
@@ -437,7 +429,7 @@ public class Controller {
         return resultat;
     }
 
-    private Matrice multScalaire(Matrice matrice, float multiplicateur) {
+    public Matrice multScalaire(Matrice matrice, float multiplicateur) {
         Matrice resultat = new Matrice("", matrice.getColumns(), matrice.getRows());
         for (int i = 0; i < matrice.getRows(); i++)
             for (int j = 0; j < matrice.getColumns(); j++)
@@ -445,13 +437,13 @@ public class Controller {
         return resultat;
     }
 
-    private Matrice puissance(Matrice matrice, int exp) {
+    public Matrice puissance(Matrice matrice, int exp) {
         for (int i = 0; i < exp - 1; i++)
             matrice = produitMat(matrice, matrice);
         return matrice;
     }
 
-    private Matrice transposee(Matrice matrice) {
+    public Matrice transposee(Matrice matrice) {
         Matrice resultat = new Matrice("", matrice.getRows(), matrice.getColumns());
         for (int i = 0; i < matrice.getRows(); i++)
             for (int j = 0; j < matrice.getColumns(); j++)
@@ -459,7 +451,7 @@ public class Controller {
         return resultat;
     }
 
-    private Matrice inversion(Matrice matrice) {
+    public Matrice inversion(Matrice matrice) {
         Matrice inverse = new Matrice("", matrice.getColumns(), matrice.getRows());
         float scalaire = determinant(matrice);
 
@@ -474,25 +466,26 @@ public class Controller {
         }
     }
 
-    private Matrice produitMat(Matrice matrice1, Matrice matrice2) {  //Ne fonctionne pas
-        int valeur = 0, calculee = 0;
+    public Matrice produitMat(Matrice matrice1, Matrice matrice2) {  //Ne fonctionne pas
+        int valeur = 0, calculee = 0, valeur2 = 0;
         Matrice resultat = new Matrice("", matrice2.getColumns(), matrice1.getRows());
 
         for (int i = 0; i < resultat.getRows(); i++) {
             for (int j = 0; j < resultat.getColumns(); j++) {
                 calculee = 0;
                 for (int k = 0; k < matrice1.getColumns(); k++) {
-                    calculee += (matrice1.getValue(k, valeur) * matrice2.getValue(valeur, k));
+                    calculee += (matrice1.getValue(k, valeur2) * matrice2.getValue(valeur, k));
                     resultat.setValue(calculee, j, i);
                 }
                 valeur++;
             }
             valeur = 0;
+            valeur2++;
         }
         return resultat;
     }
 
-    private Matrice produitVect(Matrice matrice1, Matrice matrice2) {
+    public Matrice produitVect(Matrice matrice1, Matrice matrice2) {
         Matrice resultat = new Matrice("", 3, 1);
         resultat.setValue((matrice1.getValue(1, 0) * matrice2.getValue(2, 0)) - (matrice1.getValue(2, 0) * matrice2.getValue(1, 0)), 0, 0);
         resultat.setValue(-((matrice1.getValue(0, 0) * matrice2.getValue(2, 0)) - (matrice1.getValue(2, 0) * matrice2.getValue(0, 0))), 1, 0);
@@ -500,7 +493,7 @@ public class Controller {
         return resultat;
     }
 
-    private Matrice produitHad(Matrice matrice1, Matrice matrice2) {
+    public Matrice produitHad(Matrice matrice1, Matrice matrice2) {
         Matrice resultat = new Matrice("", matrice1.getColumns(), matrice1.getRows());
         for (int i = 0; i < matrice1.getRows(); i++)
             for (int j = 0; j < matrice1.getColumns(); j++)
@@ -508,7 +501,7 @@ public class Controller {
         return resultat;
     }
 
-    private Matrice produitTens(Matrice matrice1, Matrice matrice2) {
+    public Matrice produitTens(Matrice matrice1, Matrice matrice2) {
         Matrice resultat = new Matrice("", matrice1.getColumns() * matrice2.getColumns(), matrice1.getRows() * matrice2.getRows());
         int row = 0, column = 0;
         for (int i = 0; i < matrice1.getRows(); i++) {
@@ -527,7 +520,7 @@ public class Controller {
         return resultat;
     }
 
-    private float determinant(Matrice matrice) {
+    public float determinant(Matrice matrice) {
         float resultat = 0;
 
         if (matrice.getColumns() == 1)
