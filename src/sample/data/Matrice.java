@@ -46,7 +46,7 @@ public class Matrice {
             }
 
             if (i == rows - 1)
-                matrice += "]";
+                matrice += " ]";
             else
                 matrice += "\n ";
         }

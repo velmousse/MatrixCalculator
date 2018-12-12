@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -61,11 +62,17 @@
                         <Button layoutX="512.0" layoutY="158.0" mnemonicParsing="false" onAction="#produitHad" prefHeight="50.0" prefWidth="90.0" text="Produit d'Hadamard" textAlignment="CENTER" wrapText="true" />
                         <Button layoutX="380.0" layoutY="158.0" mnemonicParsing="false" onAction="#produitTens" prefHeight="50.0" prefWidth="90.0" text="Produit tensoriel" textAlignment="CENTER" wrapText="true" />
                         <Button layoutX="316.0" layoutY="219.0" mnemonicParsing="false" onAction="#determinant" prefHeight="50.0" prefWidth="90.0" text="Déterminant" />
+                        <Button layoutX="31.0" layoutY="221.0" mnemonicParsing="false" onAction="#afficherMatrices" prefHeight="46.0" prefWidth="132.0" text="Afficher les matrices" />
                      </children></Pane>
                   <TextArea fx:id="textArea" blendMode="DARKEN" editable="false" prefHeight="473.0" prefWidth="800.0" promptText="Les résultats s'afficheront ici" />
                </children>
             </VBox>
          </content>
+      </Tab>
+      <Tab closable="false" text="Import/export">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        </content>
       </Tab>
    </tabs>
 </TabPane>

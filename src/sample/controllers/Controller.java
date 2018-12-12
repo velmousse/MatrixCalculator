@@ -160,6 +160,17 @@ public class Controller {
             return new Matrice[]{map.get(choixGauche.getValue()), map.get(choixDroite.getValue())};
     }
 
+    public void afficherMatrices() {
+        Matrice mats[] = getMatrices();
+
+        if (mats.length == 1 || mats[0] == mats[1])
+            textArea.setText(mats[0].getNom() + " = \n" + mats[0].toString());
+        else if (mats.length == 2)
+            textArea.setText(mats[0].getNom() + " = \n" + mats[0].toString() + "\n\n" + mats[1].getNom() + " = \n" + mats[1].toString());
+        else
+            textArea.setText("Veuillez entrer au moins une matrice");
+    }
+
     public void addition() {
         Matrice mats[] = getMatrices();
 
@@ -253,12 +264,12 @@ public class Controller {
             int exp = Integer.parseInt(exposant);
             int valeur = 0;
 
-            while (exp - Math.pow(2, valeur) > 0) {
+            while (exp - Math.pow(2, valeur) > 0)
                 valeur++;
-            }
-            if (exp - Math.pow(2, valeur) < 0) {
+
+            if (exp - Math.pow(2, valeur) < 0)
                 valeur--;
-            }
+
             System.out.println(valeur);
 
             for (int i = 0; i < valeur + 1; i++) {
@@ -329,7 +340,6 @@ public class Controller {
                         resultat.setValue(calculee, j, i);
                     }
                     valeur++;
-
                 }
                 valeur = 0;
             }
@@ -395,7 +405,7 @@ public class Controller {
                     }
                 }
             }
-            textArea.setText(resultat.toString());
+            textArea.setText("Le produit tensoriel de " + mats[0].getNom() + " et de " + mats[1].getNom() + " = \n" + resultat.toString());
         } else
             textArea.setText("Veuillez entrer deux matrices");
     }
