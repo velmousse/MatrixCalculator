@@ -14,8 +14,13 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import sample.data.Matrice;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -221,19 +226,43 @@ public class Controller {
             return new Matrice[]{map.get(choixGauche.getValue()), map.get(choixDroite.getValue())};
     }
 
+    public void importerMatrice() {
+
+        FileChooser fc= new FileChooser();
+        fc.setTitle("Veuillez sélectionner un fichier CSV");
+
+        fc.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter(
+                        "Fichiers CSV", "*.csv")
+        );
+        Stage stage= new Stage();
+        File fichier = fc.showOpenDialog(stage);
+        try {
+            BufferedReader entree = new BufferedReader(new FileReader(fichier.getPath()));
+            String newHello = new String(Files.readAllBytes(Paths.get(fichier.getPath())));
+            System.out.print(newHello);
+        }
+        catch (NullPointerException o){}
+        catch (FileNotFoundException o){}
+        catch (IOException p){}
+
+    }
+
     public void afficherMatrices() {
         Matrice mats[] = getMatrices();
-
+        try{
         if (mats.length == 1 || mats[0] == mats[1])
             textArea.setText(mats[0].getNom() + " = \n" + mats[0].toString());
         else if (mats.length == 2)
             textArea.setText(mats[0].getNom() + " = \n" + mats[0].toString() + "\n\n" + mats[1].getNom() + " = \n" + mats[1].toString());
         else
-            textArea.setText("Veuillez entrer au moins une matrice");
+            textArea.setText("Veuillez entrer au moins une matrice");}
+            catch (NullPointerException o){}
     }
 
     public void setAddition() {
         Matrice mats[] = getMatrices();
+
         if (mats.length == 2) {
             if (mats[0].getRows() == mats[1].getRows() && mats[0].getColumns() == mats[0].getColumns()) {
                 try {
@@ -286,7 +315,7 @@ public class Controller {
                 Matrice resultat = multScalaire(mats[0], multiplicateur);
                 textArea.setText(multiplicateur + " * " + mats[0].getNom() + " = \n" + resultat.toString());
             }
-            catch (NullPointerException e) {e.printStackTrace();}
+            catch (NullPointerException e) {}
         } else
             textArea.setText("Veuillez entrer une seule matrice");
     }
@@ -315,7 +344,7 @@ public class Controller {
                 Matrice resultat = puissance(mats[0], exp);
                 textArea.setText(mats[0].getNom() + "^" + exp + " = \n" + resultat.toString());
             }
-            catch (NullPointerException e) {e.printStackTrace();}
+            catch (NullPointerException e) {}
         } else
             textArea.setText("Veuillez entrer une seule matrice");
     }
@@ -326,94 +355,114 @@ public class Controller {
             try {
                 Matrice resultat = transposee(mats[0]);
                 textArea.setText(mats[0].getNom() + "^t = \n" + resultat.toString());
-            } catch (NullPointerException e) {e.printStackTrace();}
+            } catch (NullPointerException e) {}
         } else
             textArea.setText("Veuillez entrer une seule matrice");
     }
 
     public void setInversion() {
         Matrice mats[] = getMatrices();
-        if (mats.length == 1) {
-            if (mats[0].getRows() == mats[0].getColumns()) {
-                try {
-                    Matrice resultat = inversion(mats[0]);
-                    if (resultat != null)
-                        textArea.setText(mats[0].getNom() + "^-1 = \n" + resultat.toString());
-                } catch (NullPointerException e) { e.printStackTrace();}
+        try {
+            if (mats.length == 1) {
+                if (mats[0].getRows() == mats[0].getColumns()) {
+                    try {
+                        Matrice resultat = inversion(mats[0]);
+                        if (resultat != null)
+                            textArea.setText(mats[0].getNom() + "^-1 = \n" + resultat.toString());
+                    } catch (NullPointerException e) {
+                    }
+                } else
+                    textArea.setText("La matrice doit être carrée");
             } else
-                textArea.setText("La matrice doit être carrée");
-        } else
-            textArea.setText("Veuillez entrer une seule matrice");
+                textArea.setText("Veuillez entrer une seule matrice");
+        }
+        catch (NullPointerException o){}
     }
 
     public void setProduitMat() {
         Matrice mats[] = getMatrices();
+        try{
         if (mats.length == 2) {
             if (mats[0].getColumns() == mats[1].getRows()) {
                 try {
                     Matrice resultat = produitMat(mats[0], mats[1]);
                     textArea.setText(mats[0].getNom() + " x " + mats[1].getNom() + " = \n" + resultat.toString());
-                } catch (NullPointerException e) {e.printStackTrace();}
+                } catch (NullPointerException e) {}
             } else
                 textArea.setText("Matrices incompatibles");
         } else
-            textArea.setText("Veuillez entrer deux matrices");
+            textArea.setText("Veuillez entrer deux matrices");}
+            catch (NullPointerException o){}
     }
 
     public void setProduitVect() {
         Matrice mats[] = getMatrices();
-        if (mats.length == 2) {
-            if (mats[0].getRows() == mats[1].getRows() && mats[0].getColumns() == mats[1].getColumns()) {
-                if (mats[0].getRows() == 1 && mats[0].getColumns() == 3) {
-                    try {
-                        Matrice resultat = produitVect(mats[0], mats[1]);
-                        textArea.setText("Le produit vectoriel de " + mats[0].getNom() + " x " + mats[1].getNom() + " = \n" + resultat.toString());
-                    } catch (NullPointerException e) {e.printStackTrace();}
+        try {
+            if (mats.length == 2) {
+                if (mats[0].getRows() == mats[1].getRows() && mats[0].getColumns() == mats[1].getColumns()) {
+                    if (mats[0].getRows() == 1 && mats[0].getColumns() == 3) {
+                        try {
+                            Matrice resultat = produitVect(mats[0], mats[1]);
+                            textArea.setText("Le produit vectoriel de " + mats[0].getNom() + " x " + mats[1].getNom() + " = \n" + resultat.toString());
+                        } catch (NullPointerException e) {
+                        }
+                    } else
+                        textArea.setText("Des vecteurs doivent être entrés");
                 } else
-                    textArea.setText("Des vecteurs doivent être entrés");
+                    textArea.setText("Les matrices doivent être de même format");
             } else
-                textArea.setText("Les matrices doivent être de même format");
-        } else
-            textArea.setText("Deux vecteurs de format 1x3 doivent être entrés");
+                textArea.setText("Deux vecteurs de format 1x3 doivent être entrés");
+        }
+        catch (NullPointerException o){}
     }
 
     public void setProduitHad() {
         Matrice mats[] = getMatrices();
-        if (mats.length == 2) {
-            if (mats[0].getColumns() == mats[1].getColumns() && mats[0].getRows() == mats[1].getRows()) {
-                try {
-                    Matrice resultat = produitHad(mats[0], mats[1]);
-                    textArea.setText("Le produit d'Hadamard de " + mats[0].getNom() + " x " + mats[1].getNom() + " = \n" + resultat.toString());
-                } catch (NullPointerException e) {e.printStackTrace();}
+        try {
+            if (mats.length == 2) {
+                if (mats[0].getColumns() == mats[1].getColumns() && mats[0].getRows() == mats[1].getRows()) {
+                    try {
+                        Matrice resultat = produitHad(mats[0], mats[1]);
+                        textArea.setText("Le produit d'Hadamard de " + mats[0].getNom() + " x " + mats[1].getNom() + " = \n" + resultat.toString());
+                    } catch (NullPointerException e) {
+                    }
+                } else
+                    textArea.setText("Matrices incompatibles");
             } else
-                textArea.setText("Matrices incompatibles");
-        } else
-            textArea.setText("Veuillez entrer deux matrices");
+                textArea.setText("Veuillez entrer deux matrices");
+        }
+        catch (NullPointerException o){}
     }
 
     public void setProduitTens() {
         Matrice mats[] = getMatrices();
+        try{
         if (mats.length == 2) {
             try {
                 Matrice resultat = produitTens(mats[0], mats[1]);
                 textArea.setText("Le produit tensoriel de " + mats[0].getNom() + " x " + mats[1].getNom() + " = \n" + resultat.toString());
-            } catch (NullPointerException e) {e.printStackTrace();}
+            } catch (NullPointerException e) {}
         } else
-            textArea.setText("Veuillez entrer deux matrices");
+            textArea.setText("Veuillez entrer deux matrices");}
+            catch (NullPointerException o){}
     }
 
     public void setDeterminant() {
         Matrice mats[] = getMatrices();
-        if (mats.length == 1) {
-            if (mats[0].getRows() == mats[0].getColumns()) {
-                try {
-                    float resultat = determinant(mats[0]);
-                    textArea.setText("Det(" + mats[0].getNom() + ") = " + resultat);
-                } catch (NullPointerException e) {e.printStackTrace();}
+        try {
+            if (mats.length == 1) {
+                if (mats[0].getRows() == mats[0].getColumns()) {
+                    try {
+                        float resultat = determinant(mats[0]);
+                        textArea.setText("Det(" + mats[0].getNom() + ") = " + resultat);
+                    } catch (NullPointerException e) {
+                    }
+                } else
+                    textArea.setText("La matrice doit être carrée");
             } else
-                textArea.setText("La matrice doit être carrée");
-        } else
-            textArea.setText("Veuillez entrer une seule matrice");
+                textArea.setText("Veuillez entrer une seule matrice");
+        }
+        catch (NullPointerException o){}
     }
 
     public Matrice additionSoustraction(boolean addition, Matrice matrice1, Matrice matrice2) {
