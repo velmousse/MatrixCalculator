@@ -43,6 +43,7 @@ public class Controller implements Printable {
     private ObservableList<String> observableList;
     private ChoiceBox<String> choixGauche, choixDroite;
     private Calculateur calc;
+    private int nomIterateur;
 
     @FXML
     private Spinner spinnerLignes, spinnerColonnes;
@@ -239,7 +240,6 @@ public class Controller implements Printable {
     }
 
     public void importerMatrice() {
-
         FileChooser fc= new FileChooser();
         fc.setTitle("Veuillez sélectionner un fichier CSV");
 
@@ -252,25 +252,17 @@ public class Controller implements Printable {
         String ligne = new String();
         ArrayList<String> liste =new ArrayList<>();
 
-
         try {
-
             BufferedReader entree = new BufferedReader(new FileReader(fichier.getPath()));
 
-            while ((ligne = entree.readLine()) != null) {
-
+            while ((ligne = entree.readLine()) != null)
                 liste.add(ligne);
-            }
 
             String[] sizeColonnes= liste.get(0).split(",");
-            float valeur=0;
-            int nom1=1;
-            String nom= "importee "+nom1;
+            float valeur = 0;
+            String nom = "Import" + ++nomIterateur;
             Matrice importee=new Matrice(nom,sizeColonnes.length,liste.size());
-
             try {
-
-
                 for (int i = 0; i < importee.getRows(); i++) {
                     for (int j = 0; j < importee.getColumns(); j++) {
                         String [] donnees= liste.get(i).split(",");
@@ -281,13 +273,33 @@ public class Controller implements Printable {
                 listeNoms.add(importee.getNom());
                 map.put(importee.getNom(),importee);
                 setChoiceBox();
-                nom1++;
             }
             catch (ArrayIndexOutOfBoundsException o){textArea.setText("Format de fichier invalide");}
         }
         catch (NullPointerException o){}
-        catch (FileNotFoundException o){}
-        catch (IOException p){}
+        catch (FileNotFoundException o)  {}
+        catch (IOException p) {}
+    }
+
+    public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
+        if (pageIndex > 0)
+            return NO_SUCH_PAGE;
+        int marge = 30;
+        int x = (int) pageFormat.getImageableX();
+        int y = (int) pageFormat.getImageableY();
+        int w = (int) pageFormat.getImageableWidth();
+        int h = (int) pageFormat.getImageableHeight();
+        graphics.drawString(textArea.getText().replaceAll("\n", "\r\n"),50,50);
+        return PAGE_EXISTS;
+    }
+
+    public void imprimer(){
+        PrinterJob job = PrinterJob.getPrinterJob();
+        job.setPrintable(this::print);
+        boolean doPrint = job.printDialog();
+        if(doPrint) {
+            try { job.print(); } catch (PrinterException e) { }
+        }
     }
 
     public void afficherMatrices() {
@@ -483,29 +495,4 @@ public class Controller implements Printable {
                 textArea.setText("Veuillez entrer une seule matrice");
         } catch (NullPointerException e) {}
     }
-    public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
-        if (pageIndex > 0) {
-            return NO_SUCH_PAGE;
-        }
-        int marge = 30;
-        int x = (int) pageFormat.getImageableX();
-        int y = (int) pageFormat.getImageableY();
-        int w = (int) pageFormat.getImageableWidth();
-        int h = (int) pageFormat.getImageableHeight();
-        graphics.drawString(textArea.getText(),50,50);
-        return PAGE_EXISTS;
-    }
-    public void imprimer(){
-        PrinterJob job = PrinterJob.getPrinterJob();
-        job.setPrintable(this::print);
-        boolean doPrint = job.printDialog();
-        if(doPrint) {
-            try {
-                job.print();
-            }
-            catch (PrinterException e1) {
-                e1.printStackTrace();
-            }
-        }
-    }
-    }
+}
