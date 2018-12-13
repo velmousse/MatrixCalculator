@@ -1,9 +1,3 @@
-//Corriger l'erreur qui survient lors de l'annulation de l'entrée dans une AlertBox
-//Améliorer les affichages de résultats
-//Ajouter les démarches
-//Tests unitaires
-//CSV et print
-
 package sample.controllers;
 
 import javafx.collections.FXCollections;
@@ -17,20 +11,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
-import sample.data.Calculateur;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import sample.data.Calculateur;
 import sample.data.Matrice;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -105,12 +96,9 @@ public class Controller implements Printable {
         transposition.setTooltip(tooltip11);
 
         setChoiceBox();
-
         gridPane.setAlignment(Pos.CENTER);
-
         gridPane.setGridLinesVisible(true);
         setGridPane();
-
         spinnerLignes.valueProperty().addListener((that, oldValue, newValue) -> setGridPane());
         spinnerColonnes.valueProperty().addListener((that, oldValue, newValue) -> setGridPane());
 
@@ -119,7 +107,6 @@ public class Controller implements Printable {
     private void setGridPane() {
         gridPane.getChildren().clear();
         textFields.clear();
-
         gridPane.setMaxSize((int) spinnerColonnes.getValue() * tfWidth, (int) spinnerLignes.getValue() * tfHeight);
 
         for (int y = 0; y < (int) spinnerLignes.getValue(); y++) {
@@ -135,7 +122,6 @@ public class Controller implements Printable {
                 temp.setMinHeight(Region.USE_PREF_SIZE);
                 temp.setPrefWidth(tfWidth);
                 temp.setPrefHeight(tfHeight);
-
                 textFields.add(temp);
                 textFields.get(0).setTooltip(tooltip);
                 gridPane.add(temp, x, y);
@@ -147,10 +133,8 @@ public class Controller implements Printable {
     public void ajouterMatrice() {
         String resultat = "", texte = "Veuillez entrer le nom de la matrice";
         boolean notNew = true, worked = false;
-
         while (notNew) {
             notNew = false;
-
             TextInputDialog alerte = new TextInputDialog("Entrez ici");
 
             alerte.setTitle("Nom de matrice");
@@ -159,13 +143,12 @@ public class Controller implements Printable {
             resultat = alerte.showAndWait().get();
 
             for (String nom : listeNoms) {
-                if (nom.equals(resultat) || resultat.isEmpty()) {
+                if (nom.equals(resultat) || resultat.isEmpty() || resultat.contains("Import")) {
                     notNew = true;
                     texte = "Veuillez entrer un nom valide";
                 }
             }
         }
-
         Matrice tempo = new Matrice(resultat, (int) spinnerColonnes.getValue(), (int) spinnerLignes.getValue());
 
         int value = 0;
@@ -174,7 +157,6 @@ public class Controller implements Printable {
                 if (!textFields.get(value).getText().isEmpty()) {
                     try {
                         tempo.setValue(Float.parseFloat(textFields.get(value).getText()), j, i);
-
                         worked = true;
                     } catch (NumberFormatException o) {
                         worked = false;
@@ -184,9 +166,8 @@ public class Controller implements Printable {
                         alerte2.setContentText("Veuillez entrer des nombres");
                         alerte2.showAndWait();
                     }
-                } else {
+                } else
                     tempo.setValue(0, j, i);
-                }
                 value++;
             }
         }
@@ -195,7 +176,6 @@ public class Controller implements Printable {
             map.put(resultat, tempo);
             listeNoms.add(resultat);
         }
-
     }
 
     private void setChoiceBox() {
@@ -219,7 +199,6 @@ public class Controller implements Printable {
         choixDroite.setMinHeight(Region.USE_PREF_SIZE);
         choixDroite.setPrefWidth(70);
         choixDroite.setPrefHeight(25);
-
         hBox.getChildren().addAll(choixGauche, choixDroite);
     }
 
@@ -240,45 +219,39 @@ public class Controller implements Printable {
     }
 
     public void importerMatrice() {
-        FileChooser fc= new FileChooser();
+        FileChooser fc = new FileChooser();
         fc.setTitle("Veuillez sélectionner un fichier CSV");
-
-        fc.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter(
-                        "Fichiers CSV", "*.csv")
-        );
-        Stage stage= new Stage();
-        File fichier = fc.showOpenDialog(stage);
-        String ligne = new String();
-        ArrayList<String> liste =new ArrayList<>();
-
+        fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Fichiers CSV", "*.csv"));
+        File fichier = fc.showOpenDialog(new Stage());
+        String ligne;
+        ArrayList<String> liste = new ArrayList<>();
         try {
             BufferedReader entree = new BufferedReader(new FileReader(fichier.getPath()));
 
             while ((ligne = entree.readLine()) != null)
                 liste.add(ligne);
 
-            String[] sizeColonnes= liste.get(0).split(",");
+            String[] sizeColonnes = liste.get(0).split(",");
             float valeur = 0;
             String nom = "Import" + ++nomIterateur;
-            Matrice importee=new Matrice(nom,sizeColonnes.length,liste.size());
+            Matrice importee = new Matrice(nom, sizeColonnes.length, liste.size());
             try {
                 for (int i = 0; i < importee.getRows(); i++) {
                     for (int j = 0; j < importee.getColumns(); j++) {
-                        String [] donnees= liste.get(i).split(",");
-                        valeur=Float.parseFloat(donnees[j]);
-                        importee.setValue(valeur,j,i);
+                        String[] donnees = liste.get(i).split(",");
+                        valeur = Float.parseFloat(donnees[j]);
+                        importee.setValue(valeur, j, i);
                     }
                 }
                 listeNoms.add(importee.getNom());
-                map.put(importee.getNom(),importee);
+                map.put(importee.getNom(), importee);
                 setChoiceBox();
+            } catch (ArrayIndexOutOfBoundsException o) {
+                textArea.setText("Format de fichier invalide");
             }
-            catch (ArrayIndexOutOfBoundsException o){textArea.setText("Format de fichier invalide");}
-        }
-        catch (NullPointerException o){}
-        catch (FileNotFoundException o)  {}
-        catch (IOException p) {}
+        } catch (NullPointerException o) { }
+        catch (FileNotFoundException o) { }
+        catch (IOException p) { }
     }
 
     public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
@@ -289,29 +262,31 @@ public class Controller implements Printable {
         int y = (int) pageFormat.getImageableY();
         int w = (int) pageFormat.getImageableWidth();
         int h = (int) pageFormat.getImageableHeight();
-        graphics.drawString(textArea.getText().replaceAll("\n", "\r\n"),50,50);
+        graphics.drawString(textArea.getText(), 50, 50);
         return PAGE_EXISTS;
     }
 
-    public void imprimer(){
+    public void imprimer() {
         PrinterJob job = PrinterJob.getPrinterJob();
         job.setPrintable(this::print);
         boolean doPrint = job.printDialog();
-        if(doPrint) {
-            try { job.print(); } catch (PrinterException e) { }
+        if (doPrint) {
+            try { job.print(); }
+            catch (PrinterException e) { }
         }
     }
 
     public void afficherMatrices() {
         Matrice mats[] = getMatrices();
-        try{
-        if (mats.length == 1 || mats[0] == mats[1])
-            textArea.setText(mats[0].getNom() + " = \n" + mats[0].toString());
-        else if (mats.length == 2)
-            textArea.setText(mats[0].getNom() + " = \n" + mats[0].toString() + "\n\n" + mats[1].getNom() + " = \n" + mats[1].toString());
-        else
-            textArea.setText("Veuillez entrer au moins une matrice");}
-            catch (NullPointerException o){}
+        try {
+            if (mats.length == 1 || mats[0] == mats[1])
+                textArea.setText(mats[0].getNom() + " = \n" + mats[0].toString());
+            else if (mats.length == 2)
+                textArea.setText(mats[0].getNom() + " = \n" + mats[0].toString() + "\n\n" + mats[1].getNom() + " = \n" + mats[1].toString());
+            else
+                textArea.setText("Veuillez entrer au moins une matrice");
+        } catch (NullPointerException o) {
+        }
     }
 
     public void setAddition() {
@@ -325,7 +300,8 @@ public class Controller implements Printable {
                     textArea.setText("Les matrices sont incompatibles");
             } else
                 textArea.setText("Veuillez entrer deux matrices");
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+        }
     }
 
     public void setSoustraction() {
@@ -339,7 +315,8 @@ public class Controller implements Printable {
                     textArea.setText("Les matrices sont incompatibles");
             } else
                 textArea.setText("Veuillez entrer deux matrices");
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+        }
     }
 
     public void setMultScalaire() {
@@ -366,7 +343,8 @@ public class Controller implements Printable {
                 textArea.setText(multiplicateur + " * " + mats[0].getNom() + " = \n" + resultat.toString());
             } else
                 textArea.setText("Veuillez entrer une seule matrice");
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+        }
     }
 
     public void setPuissance() {
@@ -395,7 +373,8 @@ public class Controller implements Printable {
                 textArea.setText(mats[0].getNom() + "^" + exp + " = \n" + resultat.toString());
             } else
                 textArea.setText("Veuillez entrer une seule matrice");
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+        }
     }
 
     public void setTransposee() {
@@ -406,7 +385,8 @@ public class Controller implements Printable {
                 textArea.setText(mats[0].getNom() + "^t = \n" + resultat.toString());
             } else
                 textArea.setText("Veuillez entrer une seule matrice");
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+        }
     }
 
     public void setInversion() {
@@ -423,7 +403,8 @@ public class Controller implements Printable {
                     textArea.setText("La matrice doit être carrée");
             } else
                 textArea.setText("Veuillez entrer une seule matrice");
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+        }
     }
 
     public void setProduitMat() {
@@ -437,7 +418,8 @@ public class Controller implements Printable {
                     textArea.setText("Matrices incompatibles");
             } else
                 textArea.setText("Veuillez entrer deux matrices");
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+        }
     }
 
     public void setProduitVect() {
@@ -454,7 +436,8 @@ public class Controller implements Printable {
                     textArea.setText("Les matrices doivent être de même format");
             } else
                 textArea.setText("Deux vecteurs de format 1x3 doivent être entrés");
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+        }
     }
 
     public void setProduitHad() {
@@ -468,7 +451,8 @@ public class Controller implements Printable {
                     textArea.setText("Matrices incompatibles");
             } else
                 textArea.setText("Veuillez entrer deux matrices");
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+        }
     }
 
     public void setProduitTens() {
@@ -479,7 +463,8 @@ public class Controller implements Printable {
                 textArea.setText("Le produit tensoriel de " + mats[0].getNom() + " x " + mats[1].getNom() + " = \n" + resultat.toString());
             } else
                 textArea.setText("Veuillez entrer deux matrices");
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+        }
     }
 
     public void setDeterminant() {
@@ -493,6 +478,7 @@ public class Controller implements Printable {
                     textArea.setText("La matrice doit être carrée");
             } else
                 textArea.setText("Veuillez entrer une seule matrice");
-        } catch (NullPointerException e) {}
+        } catch (NullPointerException e) {
+        }
     }
 }
